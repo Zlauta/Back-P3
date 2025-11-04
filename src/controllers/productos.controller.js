@@ -1,42 +1,55 @@
-export const obtenerProductosController = (req, res) => {
-    try {
-        const {msg, statusCode, data} = obtenerProductosService();
-    } catch (error) {
-        res.status(statusCode).json({ msg });
-    }
-}
+import {
+  actualizarProductoService,
+  crearProductoService,
+  eliminarProductoService,
+  obtenerProductoPorIdService,
+  obtenerProductosService,
+} from "../services/productos.service.js";
 
-export const obtenerProductoPorIdController = (req, res) => {
-    try {
-        const id = req.params.id;
-        const {msg, statusCode, data} = obtenerProductoPorIdService(id);
-    } catch (error) {
-        res.status(statusCode).json({ msg });
-    }
-}
+export const obtenerProductosController = async (req, res) => {
+  try {
+    const { msg, statusCode, data } = await obtenerProductosService();
+    res.status(statusCode).json({ msg, data });
+  } catch (error) {
+    res.status(500).json({ msg: "Error al obtener productos" });
+  }
+};
 
-export const crearProductoController = (req, res) => {
-    try {
-        const {msg, statusCode, data} = crearProductoService(req.body);
-    } catch (error) {
-        res.status(statusCode).json({ msg });
-    }
-}
+export const obtenerProductoPorIdController = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { msg, statusCode, data } = await obtenerProductoPorIdService(id);
+    res.status(statusCode).json({ msg, data });
+  } catch (error) {
+    res.status(500).json({ msg: "Error al obtener producto" });
+  }
+};
 
-export const actualizarProductoController = (req, res) => {
-    try {
-        const id = req.params.id;
-        const {msg, statusCode, data} = actualizarProductoService(id, req.body);
-    } catch (error) {
-        res.status(statusCode).json({ msg });
-    }
-}
+export const crearProductoController = async (req, res) => {
+  try {
+    const { msg, statusCode, data } = await crearProductoService(req.body);
+    res.status(statusCode).json({ msg, data });
+  } catch (error) {
+    res.status(500).json({ msg: "Error al crear producto" });
+  }
+};
 
-export const eliminarProductoController = (req, res) => {
-    try {
-        const id = req.params.id;
-        const {msg, statusCode, data} = eliminarProductoService(id);
-    } catch (error) {
-        res.status(statusCode).json({ msg });
-    }
-}
+export const actualizarProductoController = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { msg, statusCode, data } = await actualizarProductoService(id, req.body);
+    res.status(statusCode).json({ msg, data });
+  } catch (error) {
+    res.status(500).json({ msg: "Error al actualizar producto" });
+  }
+};
+
+export const eliminarProductoController = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { msg, statusCode, data } = await eliminarProductoService(id);
+    res.status(statusCode).json({ msg, data });
+  } catch (error) {
+    res.status(500).json({ msg: "Error al eliminar producto" });
+  }
+};
