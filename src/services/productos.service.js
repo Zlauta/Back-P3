@@ -57,3 +57,27 @@ export const crearProductoService = async (productoData) => {
         };
     }
 }
+
+export const actualizarProductoService = async (id, productoData) => {
+    try {
+        const productoActualizado = await ProductoModel.findByIdAndUpdate(id, productoData, { new: true, runValidators: true });
+        if (!productoActualizado) {
+            return {
+                msg: "Producto no encontrado",
+                statusCode: 404,
+                data: null,
+            };
+        }
+        return {
+            msg: "Producto actualizado exitosamente",
+            statusCode: 200,
+            data: productoActualizado,
+        };
+    } catch (error) {
+        return {
+            msg: "Error al actualizar producto",
+            statusCode: 500,
+            data: null,
+        };
+    }
+}
