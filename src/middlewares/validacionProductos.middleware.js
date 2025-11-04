@@ -8,8 +8,8 @@ export const validacionesCrearProducto = [
     .withMessage("El nombre es obligatorio")
     .isLength({ min: 2, max: 50 })
     .withMessage("El nombre debe tener entre 2 y 50 caracteres")
-    .matches(/^[a-zA-Z0-9\s]+$/)
-    .withMessage("El nombre solo puede contener letras, números y espacios")
+    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ0-9\s]+$/)
+  .withMessage("El nombre solo puede contener letras, números, espacios y caracteres en español")
     .custom(async (value) => {
       const productoExistente = await ProductoModel.findOne({ nombre: value });
       if (productoExistente) {
