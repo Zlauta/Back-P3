@@ -9,6 +9,8 @@ export const validacionesCrearProducto = [
     .withMessage("El nombre debe tener entre 2 y 50 caracteres")
     .matches(/^[a-zA-Z0-9\s]+$/)
     .withMessage("El nombre solo puede contener letras, números y espacios")
+    .isUnique()
+    .withMessage("El nombre debe ser único")
     .trim(),
 
   body("descripcion")
