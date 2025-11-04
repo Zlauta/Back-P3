@@ -1,5 +1,6 @@
 import { body, param } from "express-validator";
 import { handleValidationErrors } from "../middlewares/validacionErrores.middleware.js";
+import ProductoModel from "../models/producto.js";
 
 export const validacionesCrearProducto = [
   body("nombre")
@@ -9,8 +10,13 @@ export const validacionesCrearProducto = [
     .withMessage("El nombre debe tener entre 2 y 50 caracteres")
     .matches(/^[a-zA-Z0-9\s]+$/)
     .withMessage("El nombre solo puede contener letras, números y espacios")
-    .isUnique()
-    .withMessage("El nombre debe ser único")
+    .custom(async (value) => {
+      const productoExistente = await ProductoModel.findOne({ nombre: value });
+      if (productoExistente) {
+        throw new Error("El nombre del producto ya existe");
+      }
+      return true;
+    })
     .trim(),
 
   body("descripcion")
@@ -42,7 +48,9 @@ export const validacionesCrearProducto = [
     .isURL()
     .withMessage("La imagen debe ser una URL válida")
     .matches(/\.(jpg|jpeg|png|webp)$/)
-    .withMessage("La imagen debe ser una URL que apunte a un archivo JPG, PNG o WEBP")
+    .withMessage(
+      "La imagen debe ser una URL que apunte a un archivo JPG, PNG o WEBP"
+    )
     .matches(/^https:\/\/.+/)
     .withMessage("La imagen debe usar HTTPS"),
 
@@ -85,7 +93,9 @@ export const validacionesEditarProducto = [
     .isURL()
     .withMessage("La imagen debe ser una URL válida")
     .matches(/\.(jpg|jpeg|png|webp)$/)
-    .withMessage("La imagen debe ser una URL que apunte a un archivo JPG, PNG o WEBP")
+    .withMessage(
+      "La imagen debe ser una URL que apunte a un archivo JPG, PNG o WEBP"
+    )
     .matches(/^https:\/\/.+/)
     .withMessage("La imagen debe usar HTTPS"),
 
