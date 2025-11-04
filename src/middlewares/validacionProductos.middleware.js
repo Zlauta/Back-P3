@@ -9,7 +9,7 @@ export const validacionesCrearProducto = [
     .isLength({ min: 2, max: 50 })
     .withMessage("El nombre debe tener entre 2 y 50 caracteres")
     .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ0-9\s]+$/)
-  .withMessage("El nombre solo puede contener letras, números, espacios y caracteres en español")
+    .withMessage("El nombre solo puede contener letras, números, espacios y caracteres en español")
     .custom(async (value) => {
       const productoExistente = await ProductoModel.findOne({ nombre: value });
       if (productoExistente) {
@@ -33,6 +33,8 @@ export const validacionesCrearProducto = [
   body("precio")
     .notEmpty()
     .withMessage("El precio es obligatorio")
+    .matches(/^\d+(\.\d{1,2})?$/)
+    .withMessage("El precio debe ser un número válido con hasta 2 decimales")
     .isFloat({ min: 0 })
     .withMessage("Debe ingresar un número válido para el precio"),
 
@@ -66,6 +68,13 @@ export const validacionesEditarProducto = [
     .withMessage("El nombre debe tener entre 2 y 50 caracteres")
     .matches(/^[a-zA-Z0-9\s]+$/)
     .withMessage("El nombre solo puede contener letras, números y espacios")
+    .custom(async (value) => {
+      const productoExistente = await ProductoModel.findOne({ nombre: value });
+      if (productoExistente) {
+        throw new Error("El nombre del producto ya existe");
+      }
+      return true;
+    })
     .trim(),
 
   body("descripcion")
@@ -80,6 +89,8 @@ export const validacionesEditarProducto = [
 
   body("precio")
     .optional()
+    .matches(/^\d+(\.\d{1,2})?$/)
+    .withMessage("El precio debe ser un número válido con hasta 2 decimales")
     .isFloat({ min: 0 })
     .withMessage("Debe ingresar un número válido para el precio"),
 
