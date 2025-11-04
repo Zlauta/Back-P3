@@ -21,3 +21,11 @@ export const crearProductoController = (req, res) => {
         res.status(statusCode).json({ msg });
     }
 }
+
+export const actualizarProductoController = (req, res) => {
+    try {
+        const {msg, statusCode, data} = actualizarProductoService(req.params.id, req.body);
+    } catch (error) {
+        res.status(statusCode).json({ msg });
+    }
+}
