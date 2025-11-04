@@ -4,7 +4,7 @@ import { validationResult } from "express-validator";
  * Middleware genérico para capturar y devolver errores de validación.
  * Se usa al final del arreglo de middlewares en las rutas.
  */
-export const validarCampos = (req, res, next) => {
+export const validarCampos = (req, res, ) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
