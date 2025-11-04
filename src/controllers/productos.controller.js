@@ -5,3 +5,11 @@ export const obtenerProductosController = (req, res) => {
         res.status(statusCode).json({ msg });
     }
 }
+
+export const obtenerProductoPorIdController = (req, res) => {
+    try {
+        const {msg, statusCode, data} = obtenerProductoPorIdService(req.params.id);
+    } catch (error) {
+        res.status(statusCode).json({ msg });
+    }
+}
