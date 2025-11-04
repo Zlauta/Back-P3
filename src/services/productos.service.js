@@ -40,3 +40,20 @@ try {
 }
 }
 
+export const crearProductoService = async (productoData) => {
+    try {
+        const nuevoProducto = new ProductoModel(productoData);
+        await nuevoProducto.save();
+        return {
+            msg: "Producto creado exitosamente",
+            statusCode: 201,
+            data: nuevoProducto,
+        };
+    } catch (error) {
+        return {
+            msg: "Error al crear producto",
+            statusCode: 500,
+            data: null,
+        };
+    }
+}
