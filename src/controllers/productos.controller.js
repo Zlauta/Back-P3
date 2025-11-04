@@ -13,3 +13,11 @@ export const obtenerProductoPorIdController = (req, res) => {
         res.status(statusCode).json({ msg });
     }
 }
+
+export const crearProductoController = (req, res) => {
+    try {
+        const {msg, statusCode, data} = crearProductoService(req.body);
+    } catch (error) {
+        res.status(statusCode).json({ msg });
+    }
+}
