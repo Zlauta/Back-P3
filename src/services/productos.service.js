@@ -81,3 +81,27 @@ export const actualizarProductoService = async (id, productoData) => {
         };
     }
 }
+
+export const eliminarProductoService = async (id) => {
+    try {
+        const productoEliminado = await ProductoModel.findByIdAndDelete(id);
+        if (!productoEliminado) {
+            return {
+                msg: "Producto no encontrado",
+                statusCode: 404,
+                data: null,
+            };
+        }
+        return {
+            msg: "Producto eliminado exitosamente",
+            statusCode: 200,
+            data: productoEliminado,
+        };
+    } catch (error) {
+        return {
+            msg: "Error al eliminar producto",
+            statusCode: 500,
+            data: null,
+        };
+    }
+}
