@@ -8,7 +8,8 @@ export const obtenerProductosController = (req, res) => {
 
 export const obtenerProductoPorIdController = (req, res) => {
     try {
-        const {msg, statusCode, data} = obtenerProductoPorIdService(req.params.id);
+        const id = req.params.id;
+        const {msg, statusCode, data} = obtenerProductoPorIdService(id);
     } catch (error) {
         res.status(statusCode).json({ msg });
     }
@@ -24,7 +25,17 @@ export const crearProductoController = (req, res) => {
 
 export const actualizarProductoController = (req, res) => {
     try {
-        const {msg, statusCode, data} = actualizarProductoService(req.params.id, req.body);
+        const id = req.params.id;
+        const {msg, statusCode, data} = actualizarProductoService(id, req.body);
+    } catch (error) {
+        res.status(statusCode).json({ msg });
+    }
+}
+
+export const eliminarProductoController = (req, res) => {
+    try {
+        const id = req.params.id;
+        const {msg, statusCode, data} = eliminarProductoService(id);
     } catch (error) {
         res.status(statusCode).json({ msg });
     }
