@@ -14,6 +14,12 @@ app.use(express.json());
 app.use(morgan("dev"));
 const PORT = 3000;
 
+
+//app.use(cors());
+app.use(express.json());
+//app.use(morgan("dev"));
+
+
 app.use("/api", routes);
 
 app.listen(PORT, () => {
