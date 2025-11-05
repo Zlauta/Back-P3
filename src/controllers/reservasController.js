@@ -1,47 +1,51 @@
 import * as reservasService from "../services/reservasService.js";
 
+export const getReservas = async (req, res, next) => {
+  try {
+    const { status, data } = await reservasService.getReservas(req.query);
+    res.status(status).json(data);
+  } catch (error) {
+    res.status(error.status || 500).json({ message: error.message });
+  }
+};
+
+export const getReservaById = async (req, res) => {
+  try {
+    const { status, data } = await reservasService.getReservaById(
+      req.params.id
+    );
+    res.status(status).json(data);
+  } catch (error) {
+    res.status(error.status || 500).json({ message: error.message });
+  }
+};
+
 export const createReserva = async (req, res) => {
   try {
-    const reserva = await reservasService.createReserva(req.body);
-    res.status(201).json(reserva);
+    const { status, data } = await reservasService.createReserva(req.body);
+    res.status(status).json(data);
   } catch (error) {
-    return res.status(500).json({ ok: false, error: error.message });
-  }
-};
-
-export const getAllReservas = async (req, res) => {
-  try {
-    const { page = 1, limit = 10, ...filters } = req.query;
-    const result = await reservasService.getAllReservas(filters, Number(page), Number(limit));
-    res.json(result);
-  } catch (error) {
-    return res.status(500).json({ ok: false, error: error.message });
-  }
-};
-
-export const getReservaById = async (req, res, ) => {
-  try {
-    const reserva = await reservasService.getReservaById(req.params.id);
-    res.json(reserva);
-  } catch (error) {
-  return res.status(500).json({ ok: false, error: error.message });
+    res.status(error.status || 500).json({ message: error.message });
   }
 };
 
 export const updateReserva = async (req, res) => {
   try {
-    const reserva = await reservasService.updateReserva(req.params.id, req.body);
-    res.json(reserva);
+    const { status, data } = await reservasService.updateReserva(
+      req.params.id,
+      req.body
+    );
+    res.status(status).json(data);
   } catch (error) {
-    return res.status(500).json({ ok: false, error: error.message });
+    res.status(error.status || 500).json({ message: error.message });
   }
 };
 
 export const deleteReserva = async (req, res) => {
   try {
-    await reservasService.deleteReserva(req.params.id);
-    res.status(204).send();
+    const { status, data } = await reservasService.deleteReserva(req.params.id);
+    res.status(status).json(data);
   } catch (error) {
-    return res.status(500).json({ ok: false, error: error.message });
+    res.status(error.status || 500).json({ message: error.message });
   }
 };
