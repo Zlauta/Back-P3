@@ -1,5 +1,6 @@
 import UsuarioModel from "../models/usuarios.model.js";
 import argon from "argon2";
+import jwt from "jsonwebtoken";
 
 export const registrarUsuarioService = async (body) => {
   try {
@@ -29,10 +30,7 @@ export const registrarUsuarioService = async (body) => {
 export const loginUsuarioService = async (body) => {
   try {
     const usuarioExistente = await UsuarioModel.findOne({
-      $or: [
-        { nombreUsuario: body.nombreUsuario },
-        { emailUsuario: body.emailUsuario },
-      ],
+      $or: [{ nombre: body.nombre }, { email: body.email }],
     });
     if (!usuarioExistente)
       return {
@@ -51,23 +49,25 @@ export const loginUsuarioService = async (body) => {
         msg: "Usuario o contraseña incorrecto - CONTRASEÑIA",
       };
 
+    console.log(usuarioExistente);
     // crear el token
-    /* const payload = {
-      nombreUsuario: usuarioExistente.nombreUsuario,
-      emailUsuario: usuarioExistente.emailUsuario,
-      rolUsuario: usuarioExistente.rolUsuario,
-      idCarrito: usuarioExistente.idCarrito,
+    const payload = {
+      nombre: usuarioExistente.nombre,
+      email: usuarioExistente.email,
+      rol: usuarioExistente.rol,
+      //idCarrito: usuarioExistente.idCarrito,
     };
-  
+
     const token = jwt.sign(payload, process.env.SECRET_KEY, {
       expiresIn: "30d",
-    }); */
+    });
 
+    console.log(token);
     return {
       statusCode: 200,
       msg: "Usuario logueado correctamente",
-      /*   token,
-      payload, */
+      token,
+      payload,
     };
   } catch (error) {
     console.error(error);

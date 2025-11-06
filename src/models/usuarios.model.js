@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 const usuarioSchema = new Schema(
   {
-    nombreUsuario: {
+    nombre: {
       type: String,
       required: true,
       unique: true,
@@ -10,7 +10,7 @@ const usuarioSchema = new Schema(
       minLength: 2,
       maxLength: 50,
     },
-    emailUsuario: {
+    email: {
       type: String,
       required: true,
       unique: true,
@@ -31,7 +31,7 @@ const usuarioSchema = new Schema(
       required: true,
       match: /^\+?[1-9]\d{1,14}$/,
     },
-    rolUsuario: {
+    rol: {
       type: String,
       required: true,
       enum: ["admin", "cliente"],
