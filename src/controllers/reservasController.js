@@ -28,6 +28,18 @@ export const createReserva = async (req, res) => {
     res.status(error.status || 500).json({ message: error.message });
   }
 };
+export const postReserva = async (req, res) => {
+  try {
+    const result = await createReserva(req.body);
+    res.status(result.status).json(result.data);
+  } catch (error) {
+    console.error("❌ Error al crear reserva:", error); // ya lo estás viendo en la consola
+    res.status(error.status || 500).json({
+      message: error.message || "estoy aqui",
+      details: error.details || error.message || error,
+    });
+  }
+};
 
 export const updateReserva = async (req, res) => {
   try {
