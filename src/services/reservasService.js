@@ -41,13 +41,25 @@ export const createReserva = async (data) => {
     await reserva.save();
     return { status: 201, data: reserva };
   } catch (error) {
+    if (error.name === "ValidationError") {
+      // Error de validación de Mongoose (notas, hora, etc)
+      const mensajes = Object.values(error.errors).map((e) => e.message);
+      throw {
+        status: 400,
+        message: "La nota contiene palabras inapropiadas",
+        details: mensajes, // esto mostrará específicamente qué campo falló
+      };
+    }
+
     if (error.code === 11000) {
-      // índice único: mesa duplicada en mismo horario
+      // índice único
       throw {
         status: 400,
         message: "La mesa ya está reservada para esa fecha y hora",
       };
     }
+
+    // Otros errores
     throw {
       status: 500,
       message: "Error al crear la reserva",
