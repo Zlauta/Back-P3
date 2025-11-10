@@ -10,4 +10,6 @@ router.use("/usuarios", usuariosRoutes);
 
 router.use("/productos", productosRoutes);
 
+router.use("/reservas", (await import("./reservas.routes.js")).default);
+
 export default router;
