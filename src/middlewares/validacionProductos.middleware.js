@@ -9,7 +9,9 @@ export const validacionesCrearProducto = [
     .isLength({ min: 2, max: 50 })
     .withMessage("El nombre debe tener entre 2 y 50 caracteres")
     .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ0-9\s]+$/)
-    .withMessage("El nombre solo puede contener letras, números, espacios y caracteres en español")
+    .withMessage(
+      "El nombre solo puede contener letras, números, espacios y caracteres en español"
+    )
     .custom(async (value) => {
       const productoExistente = await ProductoModel.findOne({ nombre: value });
       if (productoExistente) {
@@ -24,7 +26,7 @@ export const validacionesCrearProducto = [
     .withMessage("La descripción es obligatoria")
     .isLength({ min: 10, max: 500 })
     .withMessage("Debe ingresar una descripción entre 10 y 500 caracteres")
-    .matches(/^[a-zA-Z0-9\s]+$/)
+    .matches(/^[a-zA-ZÀ-ÿ0-9.,;:¡!¿?\-()'"%°\s]{10,500}$/u)
     .withMessage(
       "La descripción solo puede contener letras, números y espacios"
     )
@@ -49,9 +51,11 @@ export const validacionesCrearProducto = [
     .withMessage("La imagen es obligatoria")
     .isURL()
     .withMessage("La imagen debe ser una URL válida")
-    .matches(/\.(jpg|jpeg|png|webp)$/)
+    .matches(
+      /^https?:\/\/[^\s?#]+\.(?:jpe?g|png|gif|svg|webp|bmp|tiff?)(\?[^\s#]*)?$/i
+    )
     .withMessage(
-      "La imagen debe ser una URL que apunte a un archivo JPG, PNG o WEBP"
+      "Solo se permiten imágenes (.jpg, .png, .gif, .svg, .webp, .bmp, .tiff)"
     )
     .matches(/^https:\/\/.+/)
     .withMessage("La imagen debe usar HTTPS"),
@@ -68,20 +72,13 @@ export const validacionesEditarProducto = [
     .withMessage("El nombre debe tener entre 2 y 50 caracteres")
     .matches(/^[a-zA-Z0-9\s]+$/)
     .withMessage("El nombre solo puede contener letras, números y espacios")
-    .custom(async (value) => {
-      const productoExistente = await ProductoModel.findOne({ nombre: value });
-      if (productoExistente) {
-        throw new Error("El nombre del producto ya existe");
-      }
-      return true;
-    })
     .trim(),
 
   body("descripcion")
     .optional()
     .isLength({ min: 10, max: 500 })
     .withMessage("Debe ingresar una descripción entre 10 y 500 caracteres")
-    .matches(/^[a-zA-Z0-9\s]+$/)
+    .matches(/^[a-zA-ZÀ-ÿ0-9.,;:¡!¿?\-()'"%°\s]{10,500}$/u)
     .withMessage(
       "La descripción solo puede contener letras, números y espacios"
     )
@@ -103,9 +100,11 @@ export const validacionesEditarProducto = [
     .optional()
     .isURL()
     .withMessage("La imagen debe ser una URL válida")
-    .matches(/\.(jpg|jpeg|png|webp)$/)
+    .matches(
+      /^https?:\/\/[^\s?#]+\.(?:jpe?g|png|gif|svg|webp|bmp|tiff?)(\?[^\s#]*)?$/i
+    )
     .withMessage(
-      "La imagen debe ser una URL que apunte a un archivo JPG, PNG o WEBP"
+      "Solo se permiten imágenes (.jpg, .png, .gif, .svg, .webp, .bmp, .tiff)"
     )
     .matches(/^https:\/\/.+/)
     .withMessage("La imagen debe usar HTTPS"),
