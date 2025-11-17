@@ -8,21 +8,17 @@ import {
   registrarUsuarioService,
 } from "../services/usuarios.service.js";
 
-
 export const registrarUsuarioController = async (req, res) => {
   const { msg, statusCode } = await registrarUsuarioService(req.body);
   res.status(statusCode).json({ msg });
 };
 
-// login usuario
 export const loginUsuarioController = async (req, res) => {
   const { msg, statusCode, token, payload } = await loginUsuarioService(
     req.body
   );
   res.status(statusCode).json({ msg, token, payload });
 };
-
-
 
 export const obtenerUsuariosController = async (req, res) => {
   const usuarios = await obtenerUsuariosService();
@@ -36,7 +32,6 @@ export const obtenerUsuarioPorIdController = async (req, res) => {
   res.status(200).json({ usuario });
 };
 
-
 export const crearUsuarioController = async (req, res) => {
   const { msg, statusCode } = await crearUsuarioService(req.body);
   const nuevoUsuario = req.body;
@@ -47,7 +42,6 @@ export const crearUsuarioController = async (req, res) => {
     res.status(statusCode).json({ msg });
   }
 };
-
 
 export const editarUsuarioController = async (req, res) => {
   const id = req.params.id;

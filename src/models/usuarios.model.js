@@ -26,16 +26,23 @@ const usuarioSchema = new Schema(
       required: true,
       trim: true,
     },
-    telefono: {
-      type: String,
-      required: true,
-      match: /^\+?[1-9]\d{1,14}$/,
-    },
+
     rol: {
       type: String,
       required: true,
       enum: ["admin", "cliente"],
-      default: "cliente",
+      default: "admin",
+    },
+    estado: {
+      type: String,
+      required: true,
+      enum: ["activo", "inactivo"],
+      default: "activo",
+    },
+    telefono: {
+      type: String,
+      required: true,
+      match: /^\+?[1-9]\d{1,14}$/,
     },
   },
   {
