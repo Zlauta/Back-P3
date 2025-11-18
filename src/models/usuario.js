@@ -31,7 +31,7 @@ const usuarioSchema = new Schema(
       type: String,
       required: true,
       enum: ["admin", "cliente"],
-      default: "admin",
+      default: "cliente",
     },
     estado: {
       type: String,

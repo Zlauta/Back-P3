@@ -1,4 +1,4 @@
-import UsuarioModel from "../models/usuarios.model.js";
+import UsuarioModel from "../models/usuario.js";
 import argon from "argon2";
 import jwt from "jsonwebtoken";
 
@@ -50,7 +50,6 @@ export const loginUsuarioService = async (body) => {
       };
 
     console.log(usuarioExistente);
-    // crear el token
     const payload = {
       nombre: usuarioExistente.nombre,
       email: usuarioExistente.email,
@@ -74,19 +73,6 @@ export const loginUsuarioService = async (body) => {
   }
 };
 
-export const crearUsuarioService = async (body) => {
-  try {
-    const nuevoUsuarioDB = new UsuarioModel(body);
-    await nuevoUsuarioDB.save();
-    return { msg: "Usuario creado con exito", statusCode: 201 };
-  } catch (error) {
-    return {
-      msg: `Error al crear usuario: ${error?.message || "Error desconocido"}`,
-      statusCode: 400,
-    };
-  }
-};
-
 export const obtenerUsuariosService = async () => {
   try {
     const usuarios = await UsuarioModel.find();
@@ -94,11 +80,6 @@ export const obtenerUsuariosService = async () => {
   } catch (error) {
     throw new Error("error al obtener usuarios");
   }
-};
-
-export const obtenerUsuarioPorIdService = async (id) => {
-  const usuarioEncontrado = await UsuarioModel.findById(id);
-  return usuarioEncontrado;
 };
 
 export const editarUsuarioService = async (id, body) => {
@@ -127,6 +108,25 @@ export const editarUsuarioService = async (id, body) => {
 };
 
 export const eliminarUsuarioService = async (id) => {
-  const usuarioEliminado = await UsuarioModel.findByIdAndDelete(id);
-  return usuarioEliminado;
+  try {
+    const usuarioEliminado = await UsuarioModel.findByIdAndDelete(id);
+    if (!usuarioEliminado) {
+      return {
+        msg: "Usuario no encontrado",
+        statusCode: 404,
+        data: null,
+      };
+    }
+    return {
+      msg: "Usuario eliminado exitosamente",
+      statusCode: 200,
+      data: usuarioEliminado,
+    };
+  } catch (error) {
+    return {
+      msg: "Error al eliminar usuario",
+      statusCode: 500,
+      data: null,
+    };
+  }
 };
