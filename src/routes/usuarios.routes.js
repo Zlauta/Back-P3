@@ -1,24 +1,22 @@
 import { Router } from "express";
 import {
-  crearUsuarioController,
   editarUsuarioController,
   eliminarUsuarioController,
   loginUsuarioController,
-  obtenerUsuarioPorIdController,
   obtenerUsuariosController,
   registrarUsuarioController,
 } from "../controllers/usuarios.controller.js";
-
+import {
+  crearUsuarioValidator,
+  editarUsuarioValidator,
+} from "../middlewares/validacionUsuarios.middleware.js";
 
 const router = Router();
 
-router.post("/registro", registrarUsuarioController);
+router.post("/registro", crearUsuarioValidator, registrarUsuarioController);
 router.post("/login", loginUsuarioController);
-
 router.get("/", obtenerUsuariosController);
-router.get("/:id", obtenerUsuarioPorIdController);
-router.post("/", crearUsuarioController);
-router.put("/:id", editarUsuarioController);
+router.put("/:id", editarUsuarioValidator, editarUsuarioController);
 router.delete("/:id", eliminarUsuarioController);
 
 export default router;
