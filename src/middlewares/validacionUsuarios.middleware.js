@@ -64,6 +64,8 @@ export const crearUsuarioValidator = [
 ];
 
 export const editarUsuarioValidator = [
+  param("id").isMongoId().withMessage("El ID no es válido"),
+
   body("rol")
     .optional()
     .isIn(["admin", "cliente"])
@@ -81,6 +83,8 @@ export const editarUsuarioValidator = [
     .matches(/^\+?[1-9]\d{1,14}$/)
     .withMessage(
       "Debe ser un número de teléfono válido en formato internacional"
-    ).trim,
+    )
+    .trim(),
+
   handleValidationErrors,
 ];

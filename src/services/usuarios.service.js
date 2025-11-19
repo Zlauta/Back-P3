@@ -35,7 +35,7 @@ export const loginUsuarioService = async (body) => {
     if (!usuarioExistente)
       return {
         statusCode: 400,
-        msg: "Usuario o contraseña incorrecto - USUARIO",
+        msg: "Usuario o contraseña incorrecto",
       };
 
     const contraseniaOk = await argon.verify(
@@ -46,7 +46,7 @@ export const loginUsuarioService = async (body) => {
     if (!contraseniaOk)
       return {
         statusCode: 400,
-        msg: "Usuario o contraseña incorrecto - CONTRASEÑIA",
+        msg: "Usuario o contraseña incorrecto",
       };
 
     console.log(usuarioExistente);
@@ -54,6 +54,7 @@ export const loginUsuarioService = async (body) => {
       nombre: usuarioExistente.nombre,
       email: usuarioExistente.email,
       rol: usuarioExistente.rol,
+      estado: usuarioExistente.estado,
       //idCarrito: usuarioExistente.idCarrito,
     };
 
