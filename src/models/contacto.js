@@ -3,35 +3,36 @@ import { Schema, model } from "mongoose";
 const contactoSchema = new Schema(
   {
     nombre: {
-        type: String,
-        required: true,
-        trim: true,
-        unique: true,}
-    ,
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
+    },
     email: {
-        type: String,
-        required: true,
-        trim: true,
-        unique: true,
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
     },
     telefono: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-    fecha: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
+      trim: true,
     },
     mensaje: {
-        type: String,
-        required: true,
-        trim: true,
+      type: String,
+      required: true,
+      trim: true,
+    },
+    estado: {
+      type: String,
+      required: true,
+      enum: ["pendiente", "resuelto"],
+      default: "pendiente",
     },
   },
   {
     timestamps: true,
-
   }
 );
 

@@ -40,12 +40,6 @@ export const validacionesCrearContacto = [
     )
     .trim(),
 
-  body("fecha")
-    .notEmpty()
-    .withMessage("La fecha es obligatoria")
-    .matches(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/)
-    .withMessage("La fecha debe tener el formato DD/MM/YYYY"),
-
   body("mensaje")
     .notEmpty()
     .withMessage("El mensaje es obligatorio")
@@ -57,7 +51,6 @@ export const validacionesCrearContacto = [
 
   handleValidationErrors,
 ];
-
 
 export const validacionesEditarContacto = [
   param("id").isMongoId().withMessage("El ID del contacto no es válido"),
@@ -85,11 +78,6 @@ export const validacionesEditarContacto = [
       "El teléfono solo puede contener números, espacios, +, - y () y debe tener entre 6 y 20 caracteres"
     )
     .trim(),
-
-  body("fecha")
-    .optional()
-    .matches(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/)
-    .withMessage("La fecha debe tener el formato DD/MM/YYYY"),
 
   body("mensaje")
     .optional()
