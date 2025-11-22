@@ -1,5 +1,6 @@
-import UsuarioModel from "../models/usuarios.model.js";
+import UsuarioModel from "../models/usuario.js";
 import argon from "argon2";
+import jwt from "jsonwebtoken";
 
 export const registrarUsuarioService = async (body) => {
   try {
@@ -29,15 +30,12 @@ export const registrarUsuarioService = async (body) => {
 export const loginUsuarioService = async (body) => {
   try {
     const usuarioExistente = await UsuarioModel.findOne({
-      $or: [
-        { nombreUsuario: body.nombreUsuario },
-        { emailUsuario: body.emailUsuario },
-      ],
+      $or: [{ nombre: body.nombre }, { email: body.email }],
     });
     if (!usuarioExistente)
       return {
         statusCode: 400,
-        msg: "Usuario o contraseña incorrecto - USUARIO",
+        msg: "Usuario o contraseña incorrecto",
       };
 
     const contraseniaOk = await argon.verify(
@@ -48,42 +46,31 @@ export const loginUsuarioService = async (body) => {
     if (!contraseniaOk)
       return {
         statusCode: 400,
-        msg: "Usuario o contraseña incorrecto - CONTRASEÑIA",
+        msg: "Usuario o contraseña incorrecto",
       };
 
-    // crear el token
-    /* const payload = {
-      nombreUsuario: usuarioExistente.nombreUsuario,
-      emailUsuario: usuarioExistente.emailUsuario,
-      rolUsuario: usuarioExistente.rolUsuario,
-      idCarrito: usuarioExistente.idCarrito,
+    console.log(usuarioExistente);
+    const payload = {
+      nombre: usuarioExistente.nombre,
+      email: usuarioExistente.email,
+      rol: usuarioExistente.rol,
+      estado: usuarioExistente.estado,
+      //idCarrito: usuarioExistente.idCarrito,
     };
-  
+
     const token = jwt.sign(payload, process.env.SECRET_KEY, {
       expiresIn: "30d",
-    }); */
+    });
 
+    console.log(token);
     return {
       statusCode: 200,
       msg: "Usuario logueado correctamente",
-      /*   token,
-      payload, */
+      token,
+      payload,
     };
   } catch (error) {
     console.error(error);
-  }
-};
-
-export const crearUsuarioService = async (body) => {
-  try {
-    const nuevoUsuarioDB = new UsuarioModel(body);
-    await nuevoUsuarioDB.save();
-    return { msg: "Usuario creado con exito", statusCode: 201 };
-  } catch (error) {
-    return {
-      msg: `Error al crear usuario: ${error?.message || "Error desconocido"}`,
-      statusCode: 400,
-    };
   }
 };
 
@@ -94,11 +81,6 @@ export const obtenerUsuariosService = async () => {
   } catch (error) {
     throw new Error("error al obtener usuarios");
   }
-};
-
-export const obtenerUsuarioPorIdService = async (id) => {
-  const usuarioEncontrado = await UsuarioModel.findById(id);
-  return usuarioEncontrado;
 };
 
 export const editarUsuarioService = async (id, body) => {
@@ -127,6 +109,25 @@ export const editarUsuarioService = async (id, body) => {
 };
 
 export const eliminarUsuarioService = async (id) => {
-  const usuarioEliminado = await UsuarioModel.findByIdAndDelete(id);
-  return usuarioEliminado;
+  try {
+    const usuarioEliminado = await UsuarioModel.findByIdAndDelete(id);
+    if (!usuarioEliminado) {
+      return {
+        msg: "Usuario no encontrado",
+        statusCode: 404,
+        data: null,
+      };
+    }
+    return {
+      msg: "Usuario eliminado exitosamente",
+      statusCode: 200,
+      data: usuarioEliminado,
+    };
+  } catch (error) {
+    return {
+      msg: "Error al eliminar usuario",
+      statusCode: 500,
+      data: null,
+    };
+  }
 };
