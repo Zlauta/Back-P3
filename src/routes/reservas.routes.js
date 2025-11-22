@@ -9,7 +9,6 @@ import {
 
 import { validarReserva } from "../middlewares/validarReserva.js";
 import { check } from "express-validator";
-import { validarCampos } from "../middlewares/validarCampos.js";
 
 const router = express.Router();
 
@@ -25,10 +24,7 @@ router.get("/", getReservas);
  */
 router.get(
   "/:id",
-  [
-    check("id", "El ID no es válido").isMongoId(),
-    validarCampos,
-  ],
+  [check("id", "El ID no es válido").isMongoId(),],
   getReservaById
 );
 
@@ -36,11 +32,7 @@ router.get(
  * ✅ POST /api/reservas
  * Crea una nueva reserva (valida todos los campos requeridos)
  */
-router.post(
-  "/",
-  validarReserva,
-  createReserva
-);
+router.post("/", validarReserva, createReserva);
 
 /**
  * ✅ PUT /api/reservas/:id
@@ -48,10 +40,7 @@ router.post(
  */
 router.put(
   "/:id",
-  [
-    check("id", "El ID no es válido").isMongoId(),
-    validarReserva,
-  ],
+  [check("id", "El ID no es válido").isMongoId(), validarReserva],
   updateReserva
 );
 
@@ -61,10 +50,7 @@ router.put(
  */
 router.delete(
   "/:id",
-  [
-    check("id", "El ID no es válido").isMongoId(),
-    validarCampos,
-  ],
+  [check("id", "El ID no es válido").isMongoId()],
   deleteReserva
 );
 

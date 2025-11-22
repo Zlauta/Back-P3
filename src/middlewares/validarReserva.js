@@ -14,22 +14,12 @@ const palabrasProhibidas = [
 
 // ✅ Validaciones con express-validator
 export const validarReserva = [
-  // Nombre del reservante
-  body("nombre")
-    .trim()
+  // Usuario (obligatorio y debe ser un ObjectId válido)
+  body("usuario")
     .notEmpty()
-    .withMessage("El nombre del reservante es obligatorio")
-    .isLength({ min: 2 })
-    .withMessage("El nombre debe tener al menos 2 caracteres")
-    .custom((value) => {
-      const contieneProhibidas = palabrasProhibidas.some((p) =>
-        new RegExp(`\\b${p}\\b`, "i").test(value)
-      );
-      if (contieneProhibidas) {
-        throw new Error("El nombre contiene palabras inapropiadas");
-      }
-      return true;
-    }),
+    .withMessage("El usuario es obligatorio")
+    .isMongoId()
+    .withMessage("Debe ser un ID de usuario válido"),
 
   // Mesa
   body("mesa")

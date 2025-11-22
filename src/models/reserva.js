@@ -26,17 +26,32 @@ const reservaSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    hora: {
+      type: String,
+      required: true,
+    },
     notas: {
       type: String,
       trim: true,
       maxlength: [200, "Las notas no pueden superar los 200 caracteres"],
       default: "",
+      validate: {
+        validator: function (v) {
+          return !palabrasProhibidas.some((palabra) =>
+            v?.toLowerCase().includes(palabra)
+          );
+        },
+        message: "Las notas contienen palabras inapropiadas.",
+      },
     },
   },
   {
-    timestamps: true, // agrega createdAt y updatedAt automáticos
+    timestamps: true,
   }
 );
 
-//  Índice compuesto único: una mesa no puede tener dos reservas el mismo día a la misma hora
+// Índice compuesto único
 reservaSchema.index({ mesa: 1, fecha: 1, hora: 1 }, { unique: true });
+
+const Reserva = mongoose.model("Reserva", reservaSchema);
+export default Reserva;
