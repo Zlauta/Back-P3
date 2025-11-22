@@ -24,11 +24,6 @@ export const validacionesCrearContacto = [
     .withMessage("El email es obligatorio")
     .isEmail()
     .withMessage("Debe ingresar un email válido")
-    .custom(async (value) => {
-      const existe = await contactoModel.findOne({ email: value });
-      if (existe) throw new Error("El email ya está registrado");
-      return true;
-    })
     .normalizeEmail(),
 
   body("telefono")
