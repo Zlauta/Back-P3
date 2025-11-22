@@ -11,7 +11,7 @@ export const obtenerProductosService = async () => {
   } catch (error) {
     return {
       msg: "Error al obtener productos",
-      statusCode: 500,
+      statusCode: 400,
       data: null,
     };
   }
@@ -35,7 +35,7 @@ export const obtenerProductoPorIdService = async (id) => {
   } catch (error) {
     return {
       msg: "Error al obtener producto",
-      statusCode: 500,
+      statusCode: 400,
       data: null,
     };
   }
@@ -53,7 +53,7 @@ export const crearProductoService = async (productoData) => {
   } catch (error) {
     return {
       msg: "Error al crear producto",
-      statusCode: 500,
+      statusCode: 400,
       data: null,
     };
   }
@@ -81,7 +81,7 @@ export const actualizarProductoService = async (id, productoData) => {
   } catch (error) {
     return {
       msg: "Error al actualizar producto",
-      statusCode: 500,
+      statusCode: 400,
       data: null,
     };
   }
@@ -105,7 +105,7 @@ export const eliminarProductoService = async (id) => {
   } catch (error) {
     return {
       msg: "Error al eliminar producto",
-      statusCode: 500,
+      statusCode: 400,
       data: null,
     };
   }
