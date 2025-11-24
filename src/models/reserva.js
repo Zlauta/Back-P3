@@ -14,13 +14,14 @@ const palabrasProhibidas = [
 
 const reservaSchema = new mongoose.Schema(
   {
+    // ✔ Ahora es un string, no ObjectId
     usuario: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Usuario",
+      type: String,
       required: true,
+      trim: true,
     },
 
-    // ✔ Nuevo campo: email del usuario (dato único)
+    // ✔ Email único para identificar al usuario
     usuarioEmail: {
       type: String,
       required: true,
@@ -28,7 +29,7 @@ const reservaSchema = new mongoose.Schema(
       trim: true,
     },
 
-    // ✔ Nuevo campo: nombre visible en la reserva desde localStorage
+    // ✔ Nombre visible en la reserva
     nombreReserva: {
       type: String,
       trim: true,
