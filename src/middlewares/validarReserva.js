@@ -14,13 +14,6 @@ const palabrasProhibidas = [
 
 // ✅ Validaciones con express-validator
 export const validarReserva = [
-  // Usuario (obligatorio y debe ser un ObjectId válido)
-  body("usuario")
-    .notEmpty()
-    .withMessage("El usuario es obligatorio")
-    .isMongoId()
-    .withMessage("Debe ser un ID de usuario válido"),
-
   // Mesa
   body("mesa")
     .notEmpty()
