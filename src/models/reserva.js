@@ -2,7 +2,14 @@ import mongoose from "mongoose";
 
 // 🧩 Lista de palabras prohibidas
 const palabrasProhibidas = [
-  "idiota", "tonto", "gil", "mierda", "puta", "imbécil", "forro", "tarado",
+  "idiota",
+  "tonto",
+  "gil",
+  "mierda",
+  "puta",
+  "imbécil",
+  "forro",
+  "tarado",
 ];
 
 const reservaSchema = new mongoose.Schema(
@@ -12,24 +19,44 @@ const reservaSchema = new mongoose.Schema(
       ref: "Usuario",
       required: true,
     },
+
+    // ✔ Nuevo campo: email del usuario (dato único)
+    usuarioEmail: {
+      type: String,
+      required: true,
+      lowercase: true,
+      trim: true,
+    },
+
+    // ✔ Nuevo campo: nombre visible en la reserva desde localStorage
+    nombreReserva: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
     mesa: {
       type: Number,
       required: true,
       min: 1,
     },
+
     cantidadPersonas: {
       type: Number,
       required: true,
       min: 1,
     },
+
     fecha: {
       type: Date,
       required: true,
     },
+
     hora: {
       type: String,
       required: true,
     },
+
     notas: {
       type: String,
       trim: true,
