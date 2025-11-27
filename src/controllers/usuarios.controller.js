@@ -26,7 +26,11 @@ export const obtenerUsuariosController = async (req, res) => {
 export const editarUsuarioController = async (req, res) => {
   const id = req.params.id;
 
-  const usuarioActualizado = await editarUsuarioService(id, req.body);
+  const usuarioActualizado = await editarUsuarioService(
+    id,
+    req.body,
+    req.usuario
+  );
   const { msg, statusCode } = usuarioActualizado;
   if (statusCode === 200) {
     res.status(statusCode).json({ usuarioActualizado, msg });
@@ -38,15 +42,12 @@ export const editarUsuarioController = async (req, res) => {
 export const eliminarUsuarioController = async (req, res) => {
   try {
     const id = req.params.id;
-    const { msg, statusCode, data } = await eliminarUsuarioService(id);
+    const { msg, statusCode, data } = await eliminarUsuarioService(
+      id,
+      req.usuario
+    );
     res.status(statusCode).json({ msg, data });
   } catch (error) {
     res.status(404).json({ msg: "Error al eliminar usuario" });
   }
-
-  /*   const id = req.params.id;
-  const usuarioEliminado = await eliminarUsuarioService(id);
-  if (!usuarioEliminado)
-    return res.status(404).json({ msg: "Usuario no encontrado" });
-  return res.status(200).json({ usuarioEliminado, msg: "Eliminacion exitosa" }); */
 };
