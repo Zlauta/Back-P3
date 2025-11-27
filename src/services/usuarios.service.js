@@ -6,11 +6,6 @@ export const registrarUsuarioService = async (body) => {
   try {
     const nuevoUsuarioDB = new UsuarioModel(body);
     nuevoUsuarioDB.contrasenia = await argon.hash(nuevoUsuarioDB.contrasenia);
-    /* const nuevoCarritoDB = new CarritoModel({
-      idUsuario: nuevoUsuarioDB._id,
-    });
-    await nuevoCarritoDB.save();
-    nuevoUsuarioDB.idCarrito = nuevoCarritoDB._id; */
     await nuevoUsuarioDB.save();
     return {
       statusCode: 201,
@@ -55,7 +50,6 @@ export const loginUsuarioService = async (body) => {
       email: usuarioExistente.email,
       rol: usuarioExistente.rol,
       estado: usuarioExistente.estado,
-      //idCarrito: usuarioExistente.idCarrito,
     };
 
     const token = jwt.sign(payload, process.env.SECRET_KEY, {
@@ -83,8 +77,26 @@ export const obtenerUsuariosService = async () => {
   }
 };
 
-export const editarUsuarioService = async (id, body) => {
+export const editarUsuarioService = async (id, body, usuarioAuth) => {
   try {
+    const usuarioTarget = await UsuarioModel.findById(id);
+    if (!usuarioTarget) {
+      return {
+        msg: "Usuario no encontrado",
+        statusCode: 404,
+      };
+    }
+
+    // Validar que el usuario autenticado no modifique su propio rol/estado
+    if (usuarioAuth.email === usuarioTarget.email) {
+      if ("rol" in body || "estado" in body) {
+        return {
+          msg: "No puedes modificar tu propio rol ni estado",
+          statusCode: 403,
+        };
+      }
+    }
+
     const usuarioActualizadoBD = await UsuarioModel.findByIdAndUpdate(
       id,
       body,
@@ -93,9 +105,10 @@ export const editarUsuarioService = async (id, body) => {
         runValidators: true,
       }
     );
+
     return {
       usuarioActualizadoBD,
-      msg: "Usuario actualizado con exito",
+      msg: "Usuario actualizado con éxito",
       statusCode: 200,
     };
   } catch (error) {
@@ -108,16 +121,27 @@ export const editarUsuarioService = async (id, body) => {
   }
 };
 
-export const eliminarUsuarioService = async (id) => {
+export const eliminarUsuarioService = async (id, usuarioAuth) => {
   try {
-    const usuarioEliminado = await UsuarioModel.findByIdAndDelete(id);
-    if (!usuarioEliminado) {
+    const usuarioTarget = await UsuarioModel.findById(id);
+    if (!usuarioTarget) {
       return {
         msg: "Usuario no encontrado",
         statusCode: 404,
         data: null,
       };
     }
+
+    // Evitar que un usuario se elimine a sí mismo
+    if (usuarioAuth.email === usuarioTarget.email) {
+      return {
+        msg: "No puedes eliminar tu propio usuario",
+        statusCode: 403,
+        data: null,
+      };
+    }
+
+    const usuarioEliminado = await UsuarioModel.findByIdAndDelete(id);
     return {
       msg: "Usuario eliminado exitosamente",
       statusCode: 200,
