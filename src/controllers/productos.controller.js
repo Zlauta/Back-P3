@@ -11,7 +11,7 @@ export const obtenerProductosController = async (req, res) => {
     const { msg, statusCode, data } = await obtenerProductosService();
     res.status(statusCode).json({ msg, data });
   } catch (error) {
-    res.status(500).json({ msg: "Error al obtener productos" });
+    res.status(400).json({ msg: "Error al obtener productos" });
   }
 };
 
@@ -21,7 +21,7 @@ export const obtenerProductoPorIdController = async (req, res) => {
     const { msg, statusCode, data } = await obtenerProductoPorIdService(id);
     res.status(statusCode).json({ msg, data });
   } catch (error) {
-    res.status(500).json({ msg: "Error al obtener producto" });
+    res.status(400).json({ msg: "Error al obtener producto" });
   }
 };
 
@@ -30,7 +30,7 @@ export const crearProductoController = async (req, res) => {
     const { msg, statusCode, data } = await crearProductoService(req.body);
     res.status(statusCode).json({ msg, data });
   } catch (error) {
-    res.status(500).json({ msg: "Error al crear producto" });
+    res.status(400).json({ msg: "Error al crear producto" });
   }
 };
 
@@ -40,7 +40,7 @@ export const actualizarProductoController = async (req, res) => {
     const { msg, statusCode, data } = await actualizarProductoService(id, req.body);
     res.status(statusCode).json({ msg, data });
   } catch (error) {
-    res.status(500).json({ msg: "Error al actualizar producto" });
+    res.status(400).json({ msg: "Error al actualizar producto" });
   }
 };
 
@@ -50,6 +50,6 @@ export const eliminarProductoController = async (req, res) => {
     const { msg, statusCode, data } = await eliminarProductoService(id);
     res.status(statusCode).json({ msg, data });
   } catch (error) {
-    res.status(500).json({ msg: "Error al eliminar producto" });
+    res.status(400).json({ msg: "Error al eliminar producto" });
   }
 };
