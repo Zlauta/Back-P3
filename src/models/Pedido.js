@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 // Esquema para los ítems del pedido
 const ItemPedidoSchema = new mongoose.Schema({
@@ -37,5 +37,5 @@ const PedidoSchema = new mongoose.Schema(
   { timestamps: true } // agrega createdAt y updatedAt automáticamente
 );
 
-// Exportamos el modelo Pedido
-module.exports = mongoose.model("Pedido", PedidoSchema);
+// Exportamos el modelo Pedido como exportación por defecto
+export default mongoose.model("Pedido", PedidoSchema);
