@@ -5,8 +5,8 @@ import {
   crearReseniasController,
   actualizarReseniasController,
   eliminarReseniasController,
-} from "../controller/resenias.controller.js";
-import { validacionesCrearResenia, validacionesEditarResenia } from "../middleware/validacionResenias.middleware.js";
+} from "../controllers/resenias.controller.js";
+import { validacionesCrearResenia, validacionesEditarResenia } from "../middlewares/validacionResenias.middleware.js";
 
 const router = Router();
 

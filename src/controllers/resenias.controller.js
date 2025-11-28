@@ -1,4 +1,4 @@
-import { actualizarReseniasService, crearReseniasService, eliminarReseniasService, obtenerReseniasPorIdService, obtenerReseniasService } from "../service/resenias.service.js";
+import { actualizarReseniasService, crearReseniasService, eliminarReseniasService, obtenerReseniasPorIdService, obtenerReseniasService } from "../services/resenias.service.js";
 
 
 
