@@ -1,4 +1,4 @@
-import * as reservasService from "../services/reservasService.js";
+import * as reservasService from "../services/reservas.service.js";
 
 export const getReservas = async (req, res, next) => {
   try {

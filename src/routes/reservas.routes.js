@@ -5,9 +5,9 @@ import {
   createReserva,
   updateReserva,
   deleteReserva,
-} from "../controllers/reservasController.js";
+} from "../controllers/reservas.controller.js";
 
-import { validarReserva } from "../middlewares/validarReserva.js";
+import { validarReserva } from "../middlewares/validarReserva.middleware.js";
 import { check } from "express-validator";
 
 const router = express.Router();

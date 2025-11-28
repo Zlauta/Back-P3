@@ -1,4 +1,4 @@
-import UsuarioModel from "../models/usuario.js";
+import UsuarioModel from "../models/Usuario.js";
 import argon from "argon2";
 import jwt from "jsonwebtoken";
 

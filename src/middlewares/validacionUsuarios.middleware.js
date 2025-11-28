@@ -1,6 +1,6 @@
 import { body, param } from "express-validator";
 import { handleValidationErrors } from "../middlewares/validacionErrores.middleware.js";
-import UsuarioModel from "../models/usuario.js";
+import UsuarioModel from "../models/Usuario.js";
 
 export const crearUsuarioValidator = [
   body("nombre")

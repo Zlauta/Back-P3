@@ -1,4 +1,4 @@
-import { contactoModel } from "../models/contacto.js";
+import { contactoModel } from "../models/Contacto.js";
 
 export const crearContactoService = async (contactoData) => {
   try {
@@ -11,9 +11,7 @@ export const crearContactoService = async (contactoData) => {
     };
   } catch (error) {
     return {
-     msg: `Error al crear contacto: ${
-        error?.message || "Error desconocido"
-      }`,
+      msg: `Error al crear contacto: ${error?.message || "Error desconocido"}`,
       statusCode: 400,
       data: null,
     };
