@@ -1,16 +1,4 @@
-import mongoose from "mongoose";
-
-// 🧩 Lista de palabras prohibidas
-const palabrasProhibidas = [
-  "idiota",
-  "tonto",
-  "gil",
-  "mierda",
-  "puta",
-  "imbécil",
-  "forro",
-  "tarado",
-];
+import mongoose from "mongoose"
 
 const reservaSchema = new mongoose.Schema(
   {
@@ -27,13 +15,6 @@ const reservaSchema = new mongoose.Schema(
       required: true,
       lowercase: true,
       trim: true,
-    },
-
-    // ✔ Nombre visible en la reserva
-    nombreReserva: {
-      type: String,
-      trim: true,
-      default: "",
     },
 
     mesa: {
@@ -63,14 +44,6 @@ const reservaSchema = new mongoose.Schema(
       trim: true,
       maxlength: [200, "Las notas no pueden superar los 200 caracteres"],
       default: "",
-      validate: {
-        validator: function (v) {
-          return !palabrasProhibidas.some((palabra) =>
-            v?.toLowerCase().includes(palabra)
-          );
-        },
-        message: "Las notas contienen palabras inapropiadas.",
-      },
     },
   },
   {
