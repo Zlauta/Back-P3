@@ -1,6 +1,6 @@
 import { body, param } from "express-validator";
 import { handleValidationErrors } from "../middlewares/validacionErrores.middleware.js";
-import { contactoModel } from "../models/contacto.js";
+import { contactoModel } from "../models/Contacto.js";
 
 export const validacionesCrearContacto = [
   body("nombre")

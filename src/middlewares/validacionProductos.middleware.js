@@ -1,6 +1,6 @@
 import { body, param } from "express-validator";
 import { handleValidationErrors } from "../middlewares/validacionErrores.middleware.js";
-import ProductoModel from "../models/producto.js";
+import ProductoModel from "../models/Producto.js";
 
 export const validacionesCrearProducto = [
   body("nombre")
@@ -43,8 +43,10 @@ export const validacionesCrearProducto = [
   body("categoria")
     .notEmpty()
     .withMessage("La categoría es obligatoria")
-    .isIn(["comida", "bebida", "postre"])
-    .withMessage("La categoría debe ser 'comida', 'bebida' o 'postre'"),
+    .isIn(["entrada", "principal", "bebida", "postre"])
+    .withMessage(
+      "La categoría debe ser 'entrada','principal', 'bebida' o 'postre'"
+    ),
 
   body("imagen")
     .notEmpty()
@@ -93,8 +95,10 @@ export const validacionesEditarProducto = [
 
   body("categoria")
     .optional()
-    .isIn(["comida", "bebida", "postre"])
-    .withMessage("La categoría debe ser 'comida', 'bebida' o 'postre'"),
+    .isIn(["entrada", "principal", "bebida", "postre"])
+    .withMessage(
+      "La categoría debe ser 'entrada','principal', 'bebida' o 'postre'"
+    ),
 
   body("imagen")
     .optional()
