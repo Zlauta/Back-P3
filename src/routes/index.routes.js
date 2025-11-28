@@ -5,6 +5,7 @@ import productosRoutes from "./productos.routes.js";
 import contactoRoutes from "./contacto.routes.js";
 import { validarAutenticacion } from "../middlewares/auth.middleware.js";
 import pedidoRoutes from "./pedidos.routes.js"; 
+import pagosRoutes from "./pagos.routes.js"
 
 
 const router = Router();
@@ -19,6 +20,7 @@ router.use(
 router.use("/pedidos", pedidoRoutes);
 router.use("/resenias", reseniasRoutes); 
 router.use("/contacto", contactoRoutes);
+router.use("/pagos", pagosRoutes)
 
 
 export default router;

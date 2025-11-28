@@ -1,4 +1,4 @@
-import ReseniaModel from "../model/resenias.js";
+import ReseniaModel from "../models/resenias.js";
 
 export const obtenerReseniasService = async () => {
   try {
