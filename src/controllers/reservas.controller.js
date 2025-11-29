@@ -1,49 +1,53 @@
 import * as reservasService from "../services/reservas.service.js";
 
-export const getReservas = async (req, res, next) => {
+export const obtenerReservas = async (req, res) => {
   try {
-    const { status, data } = await reservasService.getReservas(req.query);
+    const { status, data } = await reservasService.obtenerReservas(req.query);
+    res.status(status).json(data);
+  } catch (error) {
+    res.status(error.status || 500).json({ message: error.message, details: error.details });
+  }
+};
+
+export const obtenerReservaPorId = async (req, res) => {
+  try {
+    const { status, data } = await reservasService.obtenerReservaPorId(req.params.id);
     res.status(status).json(data);
   } catch (error) {
     res.status(error.status || 500).json({ message: error.message });
   }
 };
 
-export const getReservaById = async (req, res) => {
+export const crearReserva = async (req, res) => {
   try {
-    const { status, data } = await reservasService.getReservaById(
-      req.params.id
+    if (!req.usuario || !req.usuario._id) {
+        return res.status(401).json({ 
+            message: "No autorizado. Debes iniciar sesión." 
+        });
+    }
+
+    const { status, data } = await reservasService.crearReserva(
+        req.body, 
+        req.usuario._id
     );
-    res.status(status).json(data);
-  } catch (error) {
-    res.status(error.status || 500).json({ message: error.message });
-  }
-};
 
-export const createReserva = async (req, res) => {
-  try {
-    const { status, data } = await reservasService.createReserva(req.body);
-    res.status(status).json(data);
+    res.status(status).json({
+        message: "Reserva creada con éxito",
+        data
+    });
+
   } catch (error) {
-    res.status(error.status || 500).json({ message: error.message });
-  }
-};
-export const postReserva = async (req, res) => {
-  try {
-    const result = await createReserva(req.body);
-    res.status(result.status).json(result.data);
-  } catch (error) {
-    console.error("❌ Error al crear reserva:", error); // ya lo estás viendo en la consola
-    res.status(error.status || 500).json({
-      message: error.message || "estoy aqui",
-      details: error.details || error.message || error,
+    console.error("❌ Error en crearReserva:", error);
+    res.status(error.status || 500).json({ 
+        message: error.message || "Error interno del servidor",
+        details: error.details 
     });
   }
 };
 
-export const updateReserva = async (req, res) => {
+export const actualizarReserva = async (req, res) => {
   try {
-    const { status, data } = await reservasService.updateReserva(
+    const { status, data } = await reservasService.actualizarReserva(
       req.params.id,
       req.body
     );
@@ -53,9 +57,9 @@ export const updateReserva = async (req, res) => {
   }
 };
 
-export const deleteReserva = async (req, res) => {
+export const eliminarReserva = async (req, res) => {
   try {
-    const { status, data } = await reservasService.deleteReserva(req.params.id);
+    const { status, data } = await reservasService.eliminarReserva(req.params.id);
     res.status(status).json(data);
   } catch (error) {
     res.status(error.status || 500).json({ message: error.message });

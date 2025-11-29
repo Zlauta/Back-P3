@@ -1,13 +1,15 @@
 import Reserva from "../models/Reserva.js";
 
-export const getReservas = async (filters = {}) => {
+export const obtenerReservas = async (filtros = {}) => {
   try {
     const query = {};
 
-    if (filters.fecha) query.fecha = filters.fecha;
-    if (filters.mesa) query.mesa = filters.mesa;
+    if (filtros.fecha) query.fecha = filtros.fecha;
+    if (filtros.mesa) query.mesa = filtros.mesa;
 
-    const reservas = await Reserva.find(query).sort({ fecha: 1, hora: 1 });
+    const reservas = await Reserva.find(query)
+      .populate("usuario", "nombre email")
+      .sort({ fecha: 1, hora: 1 });
 
     return { status: 200, data: reservas };
   } catch (error) {
@@ -19,10 +21,11 @@ export const getReservas = async (filters = {}) => {
   }
 };
 
-export const getReservaById = async (id) => {
+export const obtenerReservaPorId = async (id) => {
   try {
-    const reserva = await Reserva.findById(id);
+    const reserva = await Reserva.findById(id).populate("usuario", "nombre email");
     if (!reserva) throw { status: 404, message: "Reserva no encontrada" };
+    
     return { status: 200, data: reserva };
   } catch (error) {
     throw error.status
@@ -35,31 +38,44 @@ export const getReservaById = async (id) => {
   }
 };
 
-export const createReserva = async (data) => {
+export const crearReserva = async (datosReserva, usuarioId) => {
   try {
-    const reserva = new Reserva(data);
-    await reserva.save();
-    return { status: 201, data: reserva };
-  } catch (error) {
-    if (error.name === "ValidationError") {
-      // Error de validación de Mongoose (notas, hora, etc)
-      const mensajes = Object.values(error.errors).map((e) => e.message);
+    const { mesa, fecha, hora } = datosReserva;
+    const reservaExistente = await Reserva.findOne({ mesa, fecha, hora });
+    
+    if (reservaExistente) {
       throw {
         status: 400,
-        message: "La nota contiene palabras inapropiadas",
-        details: mensajes, // esto mostrará específicamente qué campo falló
+        message: "La mesa ya está reservada para esa fecha y hora.",
       };
     }
 
+    const nuevaReserva = new Reserva({
+      ...datosReserva,
+      usuario: usuarioId,
+    });
+
+    await nuevaReserva.save();
+    
+    return { status: 201, data: nuevaReserva };
+
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      const mensajes = Object.values(error.errors).map((e) => e.message);  
+      throw {
+        status: 400,
+        message: "Error de validación en los datos enviados",
+        details: mensajes,
+      };
+    }
     if (error.code === 11000) {
-      // índice único
       throw {
         status: 400,
         message: "La mesa ya está reservada para esa fecha y hora",
       };
     }
+    if (error.status) throw error;
 
-    // Otros errores
     throw {
       status: 500,
       message: "Error al crear la reserva",
@@ -68,11 +84,13 @@ export const createReserva = async (data) => {
   }
 };
 
-export const updateReserva = async (id, data) => {
+export const actualizarReserva = async (id, datos) => {
   try {
-    const reserva = await Reserva.findByIdAndUpdate(id, data, { new: true });
+    const reserva = await Reserva.findByIdAndUpdate(id, datos, { new: true });
+    
     if (!reserva)
       throw { status: 404, message: "Reserva no encontrada para actualizar" };
+      
     return { status: 200, data: reserva };
   } catch (error) {
     if (error.code === 11000) {
@@ -91,11 +109,13 @@ export const updateReserva = async (id, data) => {
   }
 };
 
-export const deleteReserva = async (id) => {
+export const eliminarReserva = async (id) => {
   try {
     const reserva = await Reserva.findByIdAndDelete(id);
+    
     if (!reserva)
       throw { status: 404, message: "Reserva no encontrada para eliminar" };
+      
     return { status: 204, data: null };
   } catch (error) {
     throw error.status
