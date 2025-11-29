@@ -11,7 +11,7 @@ export const validarReserva = [
   body("cantidadPersonas")
     .notEmpty()
     .withMessage("Debe indicar la cantidad de personas")
-    .isInt({ min: 1, max: 60 })
+    .isInt({ min: 1 })
     .withMessage("La cantidad de personas debe ser al menos 1"),
 
   body("fecha")
