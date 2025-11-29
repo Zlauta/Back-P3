@@ -1,6 +1,5 @@
 import { body, param } from "express-validator";
 import { handleValidationErrors } from "../middlewares/validacionErrores.middleware.js";
-import { contactoModel } from "../models/Contacto.js";
 
 export const validacionesCrearContacto = [
   body("nombre")
@@ -12,11 +11,6 @@ export const validacionesCrearContacto = [
     .withMessage(
       "El nombre solo puede contener letras, espacios y caracteres en español"
     )
-    .custom(async (value) => {
-      const existe = await contactoModel.findOne({ nombre: value });
-      if (existe) throw new Error("El nombre ya existe en la base de datos");
-      return true;
-    })
     .trim(),
 
   body("email")
@@ -31,7 +25,7 @@ export const validacionesCrearContacto = [
     .withMessage("El teléfono es obligatorio")
     .matches(/^\+?[0-9\s\-()]{6,20}$/)
     .withMessage(
-      "El teléfono solo puede contener números, espacios, +, - y () y debe tener entre 6 y 20 caracteres"
+      "El teléfono debe estar en formato internacional, por ejemplo: +5493811234567"
     )
     .trim(),
 

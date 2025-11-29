@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
-import UsuarioModel from "../src/models/usuario.js"; // Ajusta la ruta según tu proyecto
-import { connectDB } from "../src/config/config.db.js"; 
+import UsuarioModel from "../src/models/Usuario.js";
+import { connectDB } from "../src/config/config.db.js";
+import argon from "argon2";
 
 const seederUsuarios = async () => {
   try {
@@ -10,31 +11,47 @@ const seederUsuarios = async () => {
     const usuarios = [
       {
         _id: new mongoose.Types.ObjectId("691bdccf027cdfde2dc4a559"),
-        nombre: "Gloria",
-        email: "gloria@gmail.com",
-        contrasenia:
-          "$argon2id$v=19$m=65536,t=3,p=4$UaJ+9T+T8SqU5N1onExyGA$q51eFyhcKzE2jayf…",
+        nombre: "Lautaro",
+        email: "lautaro@gmail.com",
+        contrasenia: await argon.hash("@Hola123"),
         rol: "admin",
         estado: "activo",
         telefono: "+54375786780",
       },
       {
         _id: new mongoose.Types.ObjectId("691cb1398eb1ed4921b5f0e8"),
-        nombre: "Daniel",
-        email: "daniel@gmail.com",
-        contrasenia:
-          "$argon2id$v=19$m=65536,t=3,p=4$XHzF5OxbNuKVur+tUixb6g$G3BxA6fAEcrs5czU…",
+        nombre: "Matias",
+        email: "matias@gmail.com",
+        contrasenia: await argon.hash("@Hola123"),
         rol: "admin",
         estado: "inactivo",
         telefono: "+5423546478",
       },
       {
         _id: new mongoose.Types.ObjectId("6922090042aa75b263448d7f"),
-        nombre: "Sol",
-        email: "sol@gmail.com",
-        contrasenia:
-          "$argon2id$v=19$m=65536,t=3,p=4$6u5JXHsnUEH49igVvVlaQw$J9j5KTUsG4HO/JUz…",
+        nombre: "Nadia",
+        email: "nadia@gmail.com",
+        contrasenia: await argon.hash("@Hola123"),
         rol: "cliente",
+        estado: "activo",
+        telefono: "+54329812",
+      },
+
+      {
+        _id: new mongoose.Types.ObjectId("692b45e055e2ba956224cfbf"),
+        nombre: "Felipe",
+        email: "felipe@gmail.com",
+        contrasenia: await argon.hash("@Hola123"),
+        rol: "cliente",
+        estado: "inactivo",
+        telefono: "+54329812",
+      },
+      {
+        _id: new mongoose.Types.ObjectId("692b45e055e2ba956224cfef"),
+        nombre: "Amelia",
+        email: "amelia@gmail.com",
+        contrasenia: await argon.hash("@Hola123"),
+        rol: "admin",
         estado: "activo",
         telefono: "+54329812",
       },
