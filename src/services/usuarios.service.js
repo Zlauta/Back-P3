@@ -7,6 +7,7 @@ export const registrarUsuarioService = async (body) => {
     const nuevoUsuarioDB = new UsuarioModel(body);
     nuevoUsuarioDB.contrasenia = await argon.hash(nuevoUsuarioDB.contrasenia);
     await nuevoUsuarioDB.save();
+    console.log(nuevoUsuarioDB.contrasenia);
     return {
       statusCode: 201,
       msg: "Usuario registrado correctamente",
@@ -24,9 +25,7 @@ export const registrarUsuarioService = async (body) => {
 
 export const loginUsuarioService = async (body) => {
   try {
-    const usuarioExistente = await UsuarioModel.findOne({
-      $or: [{ nombre: body.nombre }, { email: body.email }],
-    });
+    const usuarioExistente = await UsuarioModel.findOne({ email: body.email });
     if (!usuarioExistente)
       return {
         statusCode: 400,
@@ -56,7 +55,6 @@ export const loginUsuarioService = async (body) => {
       expiresIn: "30d",
     });
 
-    console.log(token);
     return {
       statusCode: 200,
       msg: "Usuario logueado correctamente",
@@ -65,6 +63,10 @@ export const loginUsuarioService = async (body) => {
     };
   } catch (error) {
     console.error(error);
+    return {
+      statusCode: 500,
+      msg: `Error interno en login: ${error?.message || "Error desconocido"}`,
+    };
   }
 };
 

@@ -10,13 +10,6 @@ export const crearUsuarioValidator = [
     .withMessage("Solo se permiten letras")
     .isLength({ min: 3, max: 30 })
     .withMessage("El nombre debe tener entre 3 y 30 caracteres")
-    .custom(async (value) => {
-      const usuarioExistente = await UsuarioModel.findOne({ nombre: value });
-      if (usuarioExistente) {
-        throw new Error("El nombre del usuario ya existe");
-      }
-      return true;
-    })
     .trim(),
 
   body("email")
