@@ -34,4 +34,6 @@ const contactoSchema = new Schema(
   }
 );
 
-export const contactoModel = model("contacto", contactoSchema);
+const contactoModel = model("contacto", contactoSchema);
+
+export default contactoModel
