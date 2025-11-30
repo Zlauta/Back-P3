@@ -1,4 +1,4 @@
-import { contactoModel } from "../models/Contacto.js";
+import  contactoModel  from "../models/Contacto.js";
 
 export const crearContactoService = async (contactoData) => {
   try {
