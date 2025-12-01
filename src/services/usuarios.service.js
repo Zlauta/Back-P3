@@ -7,7 +7,6 @@ export const registrarUsuarioService = async (body) => {
     const nuevoUsuarioDB = new UsuarioModel(body);
     nuevoUsuarioDB.contrasenia = await argon.hash(nuevoUsuarioDB.contrasenia);
     await nuevoUsuarioDB.save();
-    console.log(nuevoUsuarioDB.contrasenia);
     return {
       statusCode: 201,
       msg: "Usuario registrado correctamente",
@@ -42,8 +41,6 @@ export const loginUsuarioService = async (body) => {
         statusCode: 400,
         msg: "Usuario o contraseña incorrecto",
       };
-
-    console.log(usuarioExistente);
     const payload = {
       nombre: usuarioExistente.nombre,
       email: usuarioExistente.email,
