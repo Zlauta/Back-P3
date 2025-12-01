@@ -8,8 +8,8 @@ export const crearUsuarioValidator = [
     .withMessage("El nombre de usuario es requerido")
     .matches(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s'-]+$/)
     .withMessage("Solo se permiten letras")
-    .isLength({ min: 3, max: 30 })
-    .withMessage("El nombre debe tener entre 3 y 30 caracteres")
+    .isLength({ min: 2, max: 50 })
+    .withMessage("El nombre debe tener entre 2 y 50 caracteres")
     .trim(),
 
   body("email")
@@ -30,10 +30,10 @@ export const crearUsuarioValidator = [
     .notEmpty()
     .withMessage("La contraseña es requerida")
     .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[\]{}]).{8,}$/
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[\]{};':"\\|,.<>\/?]).{8,}$/
     )
     .withMessage(
-      "La contraseña debe contener mayúsculas, minúsculas, números y caracteres especiales"
+      "La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial."
     ),
 
   body("rol")
