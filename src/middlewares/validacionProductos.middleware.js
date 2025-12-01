@@ -33,12 +33,13 @@ export const validacionesCrearProducto = [
     .trim(),
 
   body("precio")
-    .notEmpty()
-    .withMessage("El precio es obligatorio")
+    .optional()
     .matches(/^\d+(\.\d{1,2})?$/)
     .withMessage("El precio debe ser un número válido con hasta 2 decimales")
-    .isFloat({ min: 0 })
-    .withMessage("Debe ingresar un número válido para el precio"),
+    .isFloat({ min: 0, max: 1000000 })
+    .withMessage(
+      "Debe ingresar un número válido para el precio y no mayor a $1.000.000"
+    ),
 
   body("categoria")
     .notEmpty()
@@ -79,8 +80,8 @@ export const validacionesEditarProducto = [
   body("descripcion")
     .optional()
     .isLength({ min: 10, max: 500 })
-    .withMessage("Debe ingresar una descripción entre 10 y 500 caracteres")
-    .matches(/^[a-zA-ZÀ-ÿ0-9.,;:¡!¿?\-()'"%°\s]{10,500}$/u)
+    .withMessage("Debe ingresar una descripción entre 10 y 100 caracteres")
+    .matches(/^[a-zA-ZÀ-ÿ0-9.,;:¡!¿?\-()'"%°\s]{10,100}$/u)
     .withMessage(
       "La descripción solo puede contener letras, números y espacios"
     )
@@ -90,8 +91,10 @@ export const validacionesEditarProducto = [
     .optional()
     .matches(/^\d+(\.\d{1,2})?$/)
     .withMessage("El precio debe ser un número válido con hasta 2 decimales")
-    .isFloat({ min: 0 })
-    .withMessage("Debe ingresar un número válido para el precio"),
+    .isFloat({ min: 0, max: 1000000 })
+    .withMessage(
+      "Debe ingresar un número válido para el precio y no mayor a $1.000.000"
+    ),
 
   body("categoria")
     .optional()
