@@ -49,9 +49,9 @@ export const crearUsuarioValidator = [
   body("telefono")
     .notEmpty()
     .withMessage("El teléfono es obligatorio")
-    .matches(/^\+?[1-9]\d{1,14}$/)
+    .matches(/^\+?[1-9]\d{7,14}$/)
     .withMessage(
-      "Debe ser un número de teléfono válido en formato internacional"
+      "El número de teléfono debe tener entre 8 y 15 dígitos, puede comenzar con “+” y no debe iniciar con 0."
     ),
   handleValidationErrors,
 ];
@@ -73,9 +73,9 @@ export const editarUsuarioValidator = [
 
   body("telefono")
     .optional()
-    .matches(/^\+?[1-9]\d{1,14}$/)
+    .matches(/^\+?[1-9]\d{7,14}$/)
     .withMessage(
-      "Debe ser un número de teléfono válido en formato internacional"
+      "El número de teléfono debe tener entre 8 y 15 dígitos, puede comenzar con “+” y no debe iniciar con 0."
     )
     .trim(),
 

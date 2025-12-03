@@ -44,7 +44,7 @@ const usuarioSchema = new Schema(
     telefono: {
       type: String,
       required: true,
-      match: /^\+?[1-9]\d{1,14}$/,
+      match: /^\+?[1-9]\d{7,14}$/,
     },
   },
   {

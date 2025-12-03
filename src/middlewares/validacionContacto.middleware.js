@@ -23,9 +23,9 @@ export const validacionesCrearContacto = [
   body("telefono")
     .notEmpty()
     .withMessage("El teléfono es obligatorio")
-    .matches(/^\+?[1-9]\d{1,14}$/)
+    .matches(/^\+?[1-9]\d{7,14}$/)
     .withMessage(
-      "El teléfono debe estar en formato internacional, por ejemplo: +5493811234567"
+      "El número de teléfono debe tener entre 8 y 15 dígitos, puede comenzar con “+” y no debe iniciar con 0."
     )
     .trim(),
 
@@ -62,9 +62,9 @@ export const validacionesEditarContacto = [
 
   body("telefono")
     .optional()
-    .matches(/^\+?[1-9]\d{1,14}$/)
+    .matches(/^\+?[1-9]\d{7,14}$/)
     .withMessage(
-      "El teléfono solo puede contener números, espacios, +, - y () y debe tener entre 6 y 20 caracteres"
+      "El número de teléfono debe tener entre 8 y 15 dígitos, puede comenzar con “+” y no debe iniciar con 0."
     )
     .trim(),
 
