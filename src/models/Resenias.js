@@ -4,7 +4,10 @@ const reseniaSchema = new mongoose.Schema({
   nombre: {
     type: String,
     required: true,
+    unique: true,
     trim: true,
+    minLength: 2,
+    maxLength: 50,
   },
   comentario: {
     type: String,
@@ -23,7 +26,7 @@ const reseniaSchema = new mongoose.Schema({
   },
   fecha: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
 });
 

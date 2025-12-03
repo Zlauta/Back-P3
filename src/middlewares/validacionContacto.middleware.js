@@ -9,7 +9,7 @@ export const validacionesCrearContacto = [
     .withMessage("El nombre debe tener entre 2 y 50 caracteres")
     .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]+$/)
     .withMessage(
-      "El nombre solo puede contener letras, espacios y caracteres en español"
+      "El nombre solo puede contener letras, espacios y caracteres en español, y entre 2 y 50 caracteres"
     )
     .trim(),
 
