@@ -5,6 +5,7 @@ import {
   eliminarProductoController,
   obtenerProductoPorIdController,
   obtenerProductosController,
+  obtenerProductosFiltradosController,
 } from "../controllers/productos.controller.js";
 import {
   validacionesCrearProducto,
@@ -14,6 +15,8 @@ import {
 const router = Router();
 
 router.get("/", obtenerProductosController);
+
+router.get("/filtrados", obtenerProductosFiltradosController);
 
 router.get("/:id", obtenerProductoPorIdController);
 

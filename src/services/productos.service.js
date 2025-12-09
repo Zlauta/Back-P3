@@ -110,3 +110,40 @@ export const eliminarProductoService = async (id) => {
     };
   }
 };
+
+export const obtenerProductosFiltradosService = async (
+  category,
+  page = 1,
+  limit = 10
+) => {
+  try {
+    const filtro = category ? { categoria: category } : {};
+    const skip = (Number(page) - 1) * Number(limit);
+
+    const [items, totalItems] = await Promise.all([
+      ProductoModel.find(filtro).skip(skip).limit(Number(limit)),
+      ProductoModel.countDocuments(filtro),
+    ]);
+
+    const totalPages = Math.ceil(totalItems / Number(limit));
+
+    return {
+      msg: "Productos filtrados obtenidos exitosamente",
+      statusCode: 200,
+      data: {
+        items,
+        meta: {
+          totalItems,
+          totalPages,
+          currentPage: Number(page),
+        },
+      },
+    };
+  } catch (error) {
+    return {
+      msg: "Error al obtener productos filtrados",
+      statusCode: 400,
+      data: null,
+    };
+  }
+};
