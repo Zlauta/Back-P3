@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import ReseniaModel from "../src/models/Resenias.js";
 import { connectDB } from "../src/config/config.db.js";
-import argon from "argon2";
+
 
 const seederResenias = async () => {
   try {
@@ -26,11 +26,9 @@ const seederResenias = async () => {
       },
     ];
 
-    // Limpiamos las resenias existentes
     await ReseniaModel.deleteMany({});
     console.log("Resenias anteriores eliminadas");
 
-    // Insertamos las nuevas resenias
     await ReseniaModel.insertMany(resenias);
     console.log("Resenias seeders insertados correctamente");
 

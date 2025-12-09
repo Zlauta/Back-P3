@@ -57,11 +57,11 @@ const seederUsuarios = async () => {
       },
     ];
 
-    // Limpiamos los usuarios existentes (opcional)
+
     await UsuarioModel.deleteMany({});
     console.log("Usuarios anteriores eliminados");
 
-    // Insertamos los nuevos usuarios
+
     await UsuarioModel.insertMany(usuarios);
     console.log("Usuarios seeders insertados correctamente");
 

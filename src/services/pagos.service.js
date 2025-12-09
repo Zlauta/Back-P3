@@ -1,7 +1,8 @@
-import { Preference } from "mercadopago";
+import { Preference, Payment } from "mercadopago";
 import { client } from "../config/config.mercadoPago.js";
 import Pedido from "../models/Pedido.js";
 import Usuario from "../models/Usuario.js"; // 
+import pedidoService from "./pedido.service.js";
 
 export const crearPedidoYPreferencia = async ({
   items,
@@ -55,7 +56,8 @@ export const crearPedidoYPreferencia = async ({
         failure: "http://localhost:5173",
         pending: "http://localhost:5173",
       },
-      // auto_return: "approved",
+      //  auto_return: "approved",
+      notification_url: `${process.env.BASE_URL}/api/pagos/webhook`,
     };
 
     const resultadoMP = await preference.create({ body });
@@ -67,5 +69,32 @@ export const crearPedidoYPreferencia = async ({
   } catch (error) {
     console.error("Error en servicio de pagos:", error);
     throw error;
+  }
+};
+
+
+export const procesarWebhook = async (query, body) => {
+  try {
+    const topic = query.topic || query.type;
+    const type = body?.type;
+
+    if (topic === "payment" || type === "payment") {
+      const paymentId = query.id || body?.data?.id;
+
+      if (!paymentId) throw new Error("ID de pago no encontrado");
+
+      const payment = new Payment(client);
+      const pagoData = await payment.get({ id: paymentId });
+      
+      if (pagoData.status === 'approved') {
+        const idPedido = pagoData.external_reference;
+        
+        console.log(`Pago recibido. Solicitando actualización de pedido ${idPedido}...`);
+        
+        await pedidoService.actualizarEstadoPedido(idPedido, "confirmado", true);
+      }
+    }
+  } catch (error) {
+    console.error("Error webhook:", error.message);
   }
 };
