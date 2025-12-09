@@ -36,22 +36,40 @@ export const obtenerPorId = async (req, res) => {
   }
 };
 
-export const actualizarEstado = async (req, res) => {
-  try {
-    const { estado } = req.body;
-    const pedidoActualizado = await pedidoService.actualizarEstadoPedido(req.params.id, estado);
-    
-    if (!pedidoActualizado) {
-        return res.status(404).json({ message: "Pedido no encontrado" });
-    }
+export const editarPedido = async (req, res) => {
+  const { id } = req.params;
+  // Extraemos todo el body para pasárselo al servicio
+  const datosAEditar = req.body; 
 
-    res.json(pedidoActualizado);
+  try {
+    const pedidoActualizado = await pedidoService.modificarPedidoUsuario(id, datosAEditar);
+    
+    res.status(200).json(pedidoActualizado);
+
   } catch (error) {
-    console.error("Error en actualizarEstado:", error);
-    if (error.message.includes("Estado inválido")) {
-        return res.status(400).json({ message: error.message });
+    // Manejo de errores simple basado en el mensaje que lanzamos en el servicio
+    if (error.message.includes("no existe") || error.message.includes("⛔")) {
+      return res.status(400).json({ mensaje: error.message });
     }
-    res.status(500).json({ message: "Error al actualizar estado", error: error.message });
+    
+    res.status(500).json({ mensaje: "Error interno al editar el pedido" });
+  }
+};
+
+export const cambiarEstadoAdmin = async (req, res) => {
+  const { id } = req.params;
+  const { estado } = req.body; // Ej: "preparando"
+
+  try {
+    // Llamamos a la máquina de estados con FALSE (es acción manual)
+    // Esto permitirá "confirmado" -> "preparando"
+    // Pero bloqueará "confirmado" -> "pendiente"
+    const pedidoActualizado = await pedidoService.actualizarEstadoPedido(id, estado, false);
+    
+    res.json(pedidoActualizado);
+
+  } catch (error) {
+    res.status(400).json({ mensaje: error.message });
   }
 };
 
