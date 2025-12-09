@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Reserva from "../src/models/reserva.js";
 import { connectDB } from "../src/config/config.db.js";
-import argon from "argon2";
+
 
 const seederReservas = async () => {
   try {
@@ -29,11 +29,11 @@ const seederReservas = async () => {
       },
     ];
 
-    // Limpiamos los reservas existentes
+
     await Reserva.deleteMany({});
     console.log("Usuarios anteriores eliminados");
 
-    // Insertamos las nuevas reservas
+
     await Reserva.insertMany(reservas);
     console.log("Reservas seeders insertados correctamente");
 

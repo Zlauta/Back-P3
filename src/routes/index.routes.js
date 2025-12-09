@@ -18,7 +18,7 @@ router.use("/reservas", validarTokenCliente, reservasRoutes);
 router.use("/pedidos", validarTokenCliente, pedidoRoutes);
 router.use("/resenias", reseniasRoutes);
 router.use("/contacto", contactoRoutes);
-router.use("/pagos", validarTokenCliente, pagosRoutes);
+router.use("/pagos", pagosRoutes);
 router.use("/correo", correoRoutes);
 
 export default router;
