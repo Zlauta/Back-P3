@@ -1,5 +1,7 @@
 import Reserva from "../models/Reserva.js";
-import Usuario from "../models/Usuario.js"; // 👈 IMPORTANTE: Importar modelo Usuario
+import Usuario from "../models/Usuario.js";
+import { generarTemplatesCorreo } from "../utils/template.js";
+import { enviarCorreoService } from "./correo.service.js";
 
 export const obtenerReservas = async (filtros = {}) => {
   try {
@@ -13,17 +15,26 @@ export const obtenerReservas = async (filtros = {}) => {
 
     return { status: 200, data: reservas };
   } catch (error) {
-    throw { status: 500, message: "Error al obtener las reservas", details: error.message };
+    throw {
+      status: 500,
+      message: "Error al obtener las reservas",
+      details: error.message,
+    };
   }
 };
 
 export const obtenerReservaPorId = async (id) => {
   try {
-    const reserva = await Reserva.findById(id).populate("usuario", "nombre email");
+    const reserva = await Reserva.findById(id).populate(
+      "usuario",
+      "nombre email"
+    );
     if (!reserva) throw { status: 404, message: "Reserva no encontrada" };
     return { status: 200, data: reserva };
   } catch (error) {
-    throw error.status ? error : { status: 500, message: "Error al obtener la reserva" };
+    throw error.status
+      ? error
+      : { status: 500, message: "Error al obtener la reserva" };
   }
 };
 
@@ -54,8 +65,37 @@ export const crearReserva = async (datosReserva, usuarioToken) => {
     });
 
     await nuevaReserva.save();
-    return { status: 201, data: nuevaReserva };
 
+    let resultadoCorreo = {
+      enviado: false,
+      mensaje: "No se pudo enviar el correo",
+    };
+
+    try {
+      const correoData = generarTemplatesCorreo(
+        usuarioToken.email,
+        usuarioToken.nombre,
+        fecha,
+        hora,
+        mesa,
+        datosReserva.cantidadPersonas
+      );
+
+      const envio = await enviarCorreoService(correoData);
+
+      resultadoCorreo = {
+        enviado: envio.statusCode === 200,
+        mensaje: envio.msg,
+      };
+    } catch (errorCorreo) {
+      console.error("Error al enviar correo:", errorCorreo.message);
+    }
+
+    return {
+      status: 201,
+      data: nuevaReserva,
+      correo: resultadoCorreo,
+    };
   } catch (error) {
     if (error.name === "ValidationError") {
       const mensajes = Object.values(error.errors).map((e) => e.message);
@@ -66,9 +106,18 @@ export const crearReserva = async (datosReserva, usuarioToken) => {
       };
     }
     if (error.code === 11000) {
-      throw { status: 400, message: "La mesa ya está reservada para esa fecha y hora" };
+      throw {
+        status: 400,
+        message: "La mesa ya está reservada para esa fecha y hora",
+      };
     }
-    throw error.status ? error : { status: 500, message: "Error al crear la reserva", details: error.message };
+    throw error.status
+      ? error
+      : {
+          status: 500,
+          message: "Error al crear la reserva",
+          details: error.message,
+        };
   }
 };
 
@@ -78,7 +127,9 @@ export const actualizarReserva = async (id, datos) => {
     if (!reserva) throw { status: 404, message: "Reserva no encontrada" };
     return { status: 200, data: reserva };
   } catch (error) {
-    throw error.status ? error : { status: 500, message: "Error al actualizar" };
+    throw error.status
+      ? error
+      : { status: 500, message: "Error al actualizar" };
   }
 };
 
