@@ -12,27 +12,26 @@ const transporter = nodemailer.createTransport({
 });
 
 export const enviarCorreoService = async (correoData) => {
-  try {
-    const mailOptions = {
-      from: '"El Gourmet" <' + userGmail + ">",
-      to: correoData.to,
-      subject: correoData.subject,
-      text: correoData.text,
-      html: correoData.html,
-    };
+  const mailOptions = {
+    from: '"El Gourmet" <' + userGmail + ">",
+    to: correoData.to,
+    subject: correoData.subject,
+    text: correoData.text,
+    html: correoData.html,
+  };
 
-    const info = await transporter.sendMail(mailOptions);
+  const info = await transporter.sendMail(mailOptions);
 
+  if (info.rejected.length > 0) {
     return {
-      msg: "Correo enviado exitosamente",
-      statusCode: 200,
-      data: info,
-    };
-  } catch (error) {
-    return {
-      msg: "Error al enviar correo",
+      msg: "Error al enviar correo: destinatarios rechazados",
       statusCode: 400,
-      data: error.message,
+      data: info.rejected,
     };
   }
+  return {
+    msg: "Correo enviado exitosamente",
+    statusCode: 200,
+    data: info,
+  };
 };
