@@ -52,12 +52,12 @@ export const crearPedidoYPreferencia = async ({
       })),
       external_reference: pedidoGuardado._id.toString(),
       back_urls: {
-        success: "http://localhost:5173",
-        failure: "http://localhost:5173",
-        pending: "http://localhost:5173",
+        success: `${process.env.BASE_URL_FRONT}`,
+        failure: `${process.env.BASE_URL_FRONT}`,
+        pending: `${process.env.BASE_URL_FRONT}`,
       },
-      //  auto_return: "approved",
-      notification_url: `${process.env.BASE_URL}/api/pagos/webhook`,
+      auto_return: "approved",
+      notification_url: `${process.env.BASE_URL_BACK}/api/pagos/webhook`,
     };
 
     const resultadoMP = await preference.create({ body });
