@@ -22,7 +22,7 @@ const reseniaSchema = new mongoose.Schema({
   },
   activo: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   fecha: {
     type: Date,
