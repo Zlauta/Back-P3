@@ -1,6 +1,7 @@
 import { body, param } from "express-validator";
 import { handleValidationErrors } from "../middlewares/validacionErrores.middleware.js";
 import UsuarioModel from "../models/Usuario.js";
+import AppError from "../utils/appError.js";
 
 export const crearUsuarioValidator = [
   body("nombre")
@@ -21,7 +22,7 @@ export const crearUsuarioValidator = [
     .custom(async (value) => {
       const emailExistente = await UsuarioModel.findOne({ email: value });
       if (emailExistente) {
-        throw new Error("El correo electrónico ya está en uso");
+        throw new AppError("El correo electrónico ya está en uso", 400);
       }
       return true;
     }),
@@ -29,9 +30,7 @@ export const crearUsuarioValidator = [
   body("contrasenia")
     .notEmpty()
     .withMessage("La contraseña es requerida")
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[\]{};':"\\|,.<>\/?]).{8,}$/
-    )
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=[\]{};':"\\|,.<>/?]).{8,}$/)
     .withMessage(
       "La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial."
     ),

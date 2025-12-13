@@ -1,149 +1,85 @@
 import ProductoModel from "../models/Producto.js";
+import AppError from "../utils/appError.js";
 
 export const obtenerProductosService = async () => {
-  try {
-    const productos = await ProductoModel.find();
-    return {
-      msg: "Productos obtenidos exitosamente",
-      statusCode: 200,
-      data: productos,
-    };
-  } catch (error) {
-    return {
-      msg: "Error al obtener productos",
-      statusCode: 400,
-      data: null,
-    };
-  }
+  const productos = await ProductoModel.find();
+  return {
+    msg: "Productos obtenidos exitosamente",
+    statusCode: 200,
+    data: productos,
+  };
 };
 
 export const obtenerProductoPorIdService = async (id) => {
-  try {
-    const producto = await ProductoModel.findById(id);
-    if (!producto) {
-      return {
-        msg: "Producto no encontrado",
-        statusCode: 404,
-        data: null,
-      };
-    }
-    return {
-      msg: "Producto obtenido exitosamente",
-      statusCode: 200,
-      data: producto,
-    };
-  } catch (error) {
-    return {
-      msg: "Error al obtener producto",
-      statusCode: 400,
-      data: null,
-    };
+  const producto = await ProductoModel.findById(id);
+  if (!producto) {
+    throw new AppError("Producto no encontrado", 404);
   }
+  return {
+    msg: "Producto obtenido exitosamente",
+    statusCode: 200,
+    data: producto,
+  };
 };
 
 export const crearProductoService = async (productoData) => {
-  try {
-    const nuevoProducto = new ProductoModel(productoData);
-    await nuevoProducto.save();
-    return {
-      msg: "Producto creado exitosamente",
-      statusCode: 201,
-      data: nuevoProducto,
-    };
-  } catch (error) {
-    return {
-      msg: "Error al crear producto",
-      statusCode: 400,
-      data: null,
-    };
-  }
+  const nuevoProducto = new ProductoModel(productoData);
+  await nuevoProducto.save();
+  return {
+    msg: "Producto creado exitosamente",
+    statusCode: 201,
+    data: nuevoProducto,
+  };
 };
 
 export const actualizarProductoService = async (id, productoData) => {
-  try {
-    const productoActualizado = await ProductoModel.findByIdAndUpdate(
-      id,
-      productoData,
-      { new: true, runValidators: true }
-    );
-    if (!productoActualizado) {
-      return {
-        msg: "Producto no encontrado",
-        statusCode: 404,
-        data: null,
-      };
-    }
-    return {
-      msg: "Producto actualizado exitosamente",
-      statusCode: 200,
-      data: productoActualizado,
-    };
-  } catch (error) {
-    return {
-      msg: "Error al actualizar producto",
-      statusCode: 400,
-      data: null,
-    };
+  const productoActualizado = await ProductoModel.findByIdAndUpdate(id, productoData, {
+    new: true,
+    runValidators: true,
+  });
+  if (!productoActualizado) {
+    throw new AppError("Producto no encontrado", 404);
   }
+  return {
+    msg: "Producto actualizado exitosamente",
+    statusCode: 200,
+    data: productoActualizado,
+  };
 };
 
 export const eliminarProductoService = async (id) => {
-  try {
-    const productoEliminado = await ProductoModel.findByIdAndDelete(id);
-    if (!productoEliminado) {
-      return {
-        msg: "Producto no encontrado",
-        statusCode: 404,
-        data: null,
-      };
-    }
-    return {
-      msg: "Producto eliminado exitosamente",
-      statusCode: 200,
-      data: productoEliminado,
-    };
-  } catch (error) {
-    return {
-      msg: "Error al eliminar producto",
-      statusCode: 400,
-      data: null,
-    };
+  const productoEliminado = await ProductoModel.findByIdAndDelete(id);
+  if (!productoEliminado) {
+    throw new AppError("Producto no encontrado", 404);
   }
+  return {
+    msg: "Producto eliminado exitosamente",
+    statusCode: 200,
+    data: productoEliminado,
+  };
 };
 
-export const obtenerProductosFiltradosService = async (
-  category,
-  page = 1,
-  limit = 10
-) => {
-  try {
-    const filtro = category ? { categoria: category } : {};
-    const skip = (Number(page) - 1) * Number(limit);
+export const obtenerProductosFiltradosService = async (category, page = 1, limit = 10) => {
+  const filtro = category ? { categoria: category } : {};
+  const skip = (Number(page) - 1) * Number(limit);
 
-    const [items, totalItems] = await Promise.all([
-      ProductoModel.find(filtro).skip(skip).limit(Number(limit)),
-      ProductoModel.countDocuments(filtro),
-    ]);
+  const [items, totalItems] = await Promise.all([
+    ProductoModel.find(filtro).skip(skip).limit(Number(limit)),
+    ProductoModel.countDocuments(filtro),
+  ]);
 
-    const totalPages = Math.ceil(totalItems / Number(limit));
+  const totalPages = Math.ceil(totalItems / Number(limit));
 
-    return {
-      msg: "Productos filtrados obtenidos exitosamente",
-      statusCode: 200,
-      data: {
-        items,
-        meta: {
-          totalItems,
-          totalPages,
-          currentPage: Number(page),
-        },
+  return {
+    msg: "Productos filtrados obtenidos exitosamente",
+    statusCode: 200,
+    data: {
+      items,
+      meta: {
+        totalItems,
+        totalPages,
+        currentPage: Number(page),
       },
-    };
-  } catch (error) {
-    return {
-      msg: "Error al obtener productos filtrados",
-      statusCode: 400,
-      data: null,
-    };
-  }
+    },
+  };
 };
