@@ -1,4 +1,5 @@
 import Pedido from "../models/Pedido.js";
+import AppError from "../utils/appError.js";
 
 const formatearPedido = (pedido) => {
   return {
@@ -58,11 +59,11 @@ export const modificarPedidoUsuario = async (id, { items, direccion, telefono })
   const pedido = await Pedido.findById(id);
 
   if (!pedido) {
-    throw new Error("El pedido no existe");
+    throw new AppError("El pedido no existe", 404);
   }
 
   if (pedido.estado !== "pendiente") {
-    throw new Error(`⛔ El pedido ya está ${pedido.estado}, no puedes modificarlo.`);
+    throw new AppError(`El pedido ya está ${pedido.estado}, no puedes modificarlo.`, 400);
   }
 
   if (items) {
@@ -96,12 +97,12 @@ export const actualizarEstadoPedido = async (id, nuevoEstado, esWebhook = false)
 
   const pedido = await Pedido.findById(id);
   if (!pedido) {
-    throw new Error("Pedido no encontrado");
+    throw new AppError("Pedido no encontrado", 404);
   }
 
   if (nuevoEstado === "confirmado") {
     if (!esWebhook) {
-      throw new Error("⛔ Acción denegada: Requiere pago.");
+      throw new AppError("Acción denegada: Requiere pago.", 403);
     }
     if (pedido.estado !== "pendiente") {
       return pedido;
@@ -112,10 +113,9 @@ export const actualizarEstadoPedido = async (id, nuevoEstado, esWebhook = false)
       return pedido;
     }
     if (!transicionesPosibles.includes(nuevoEstado)) {
-      throw new Error(`⛔ No puedes pasar de '${pedido.estado}' a '${nuevoEstado}'.`);
+      throw new AppError(`No puedes pasar de '${pedido.estado}' a '${nuevoEstado}'.`, 400);
     }
   }
-  // ---------------------------------------------
 
   pedido.estado = nuevoEstado;
   if (nuevoEstado === "confirmado") {
