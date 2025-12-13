@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import AppError from "../utils/appError.js";
 
 const userGmail = process.env.GMAIL_USER;
 const passAppGmail = process.env.GMAIL_APP_PASSWORD;
@@ -13,7 +14,7 @@ const transporter = nodemailer.createTransport({
 
 export const enviarCorreoService = async (correoData) => {
   const mailOptions = {
-    from: "\"El Gourmet\" <" + userGmail + ">",
+    from: '"El Gourmet" <' + userGmail + ">",
     to: correoData.to,
     subject: correoData.subject,
     text: correoData.text,
@@ -23,11 +24,7 @@ export const enviarCorreoService = async (correoData) => {
   const info = await transporter.sendMail(mailOptions);
 
   if (info.rejected.length > 0) {
-    return {
-      msg: "Error al enviar correo: destinatarios rechazados",
-      statusCode: 400,
-      data: info.rejected,
-    };
+    throw new AppError("Destinatarios rechazados", 400);
   }
   return {
     msg: "Correo enviado exitosamente",

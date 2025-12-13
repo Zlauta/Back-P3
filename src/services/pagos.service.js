@@ -2,6 +2,7 @@ import { Preference, Payment } from "mercadopago";
 import { client } from "../config/config.mercadoPago.js";
 import Pedido from "../models/Pedido.js";
 import Usuario from "../models/Usuario.js";
+import AppError from "../utils/appError.js";
 import pedidoService from "./pedido.service.js";
 
 /**
@@ -17,64 +18,59 @@ export const crearPedidoYPreferencia = async ({
   emailUsuario,
 }) => {
   if (!items || items.length === 0) {
-    throw new Error("El carrito está vacío");
+    throw new AppError("El carrito está vacío", 400);
   }
 
   const usuarioEncontrado = await Usuario.findOne({ email: emailUsuario });
   if (!usuarioEncontrado) {
-    throw new Error("El usuario del token no existe en la base de datos");
+    throw new AppError("El usuario del token no existe en la base de datos", 404);
   }
 
   const idCliente = usuarioEncontrado._id;
 
-  try {
-    // Crear pedido en la base de datos
-    const nuevoPedido = new Pedido({
-      cliente: idCliente,
-      items: items.map((item) => ({
-        producto: item._id,
-        cantidad: item.cantidad || item.quantity,
-      })),
-      total: total,
-      estado: "pendiente",
-      direccion: direccion || "Retiro en Local",
-      telefono: telefono || "Sin teléfono",
-    });
+  // Crear pedido en la base de datos
+  const nuevoPedido = new Pedido({
+    cliente: idCliente,
+    items: items.map((item) => ({
+      producto: item._id,
+      cantidad: item.cantidad || item.quantity,
+    })),
+    total: total,
+    estado: "pendiente",
+    direccion: direccion || "Retiro en Local",
+    telefono: telefono || "Sin teléfono",
+  });
 
-    const pedidoGuardado = await nuevoPedido.save();
+  const pedidoGuardado = await nuevoPedido.save();
 
-    // Crear preferencia de Mercado Pago
-    const preference = new Preference(client);
+  // Crear preferencia de Mercado Pago
+  const preference = new Preference(client);
 
-    const body = {
-      items: items.map((item) => ({
-        title: item.nombre || item.name,
-        quantity: Number(item.cantidad || item.quantity),
-        unit_price: Number(item.precio || item.price),
-        currency_id: "ARS",
-      })),
-      external_reference: pedidoGuardado._id.toString(),
-      back_urls: {
-        success: `${process.env.BASE_URL_FRONT}`,
-        failure: `${process.env.BASE_URL_FRONT}`,
-        pending: `${process.env.BASE_URL_FRONT}`,
-      },
-      auto_return: "approved",
-      notification_url: `${process.env.BASE_URL_BACK}/api/pagos/webhook`,
-    };
+  const body = {
+    items: items.map((item) => ({
+      title: item.nombre || item.name,
+      quantity: Number(item.cantidad || item.quantity),
+      unit_price: Number(item.precio || item.price),
+      currency_id: "ARS",
+    })),
+    external_reference: pedidoGuardado._id.toString(),
+    back_urls: {
+      success: `${process.env.BASE_URL_FRONT}`,
+      failure: `${process.env.BASE_URL_FRONT}`,
+      pending: `${process.env.BASE_URL_FRONT}`,
+    },
+    auto_return: "approved",
+    notification_url: `${process.env.BASE_URL_BACK}/api/pagos/webhook`,
+  };
 
-    const resultadoMP = await preference.create({ body });
+  const resultadoMP = await preference.create({ body });
 
-    console.log(`✓ Preferencia creada: ${resultadoMP.id} para pedido ${pedidoGuardado._id}`);
+  console.log(`✓ Preferencia creada: ${resultadoMP.id} para pedido ${pedidoGuardado._id}`);
 
-    return {
-      id: resultadoMP.id,
-      idPedido: pedidoGuardado._id,
-    };
-  } catch (error) {
-    console.error("❌ Error en servicio de pagos:", error.message);
-    throw error;
-  }
+  return {
+    id: resultadoMP.id,
+    idPedido: pedidoGuardado._id,
+  };
 };
 
 /**
