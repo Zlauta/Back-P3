@@ -6,8 +6,12 @@ import { enviarCorreoService } from "./correo.service.js";
 export const obtenerReservas = async (filtros = {}) => {
   try {
     const query = {};
-    if (filtros.fecha) query.fecha = filtros.fecha;
-    if (filtros.mesa) query.mesa = filtros.mesa;
+    if (filtros.fecha) {
+      query.fecha = filtros.fecha;
+    }
+    if (filtros.mesa) {
+      query.mesa = filtros.mesa;
+    }
 
     const reservas = await Reserva.find(query)
       .populate("usuario", "nombre email")
@@ -25,16 +29,13 @@ export const obtenerReservas = async (filtros = {}) => {
 
 export const obtenerReservaPorId = async (id) => {
   try {
-    const reserva = await Reserva.findById(id).populate(
-      "usuario",
-      "nombre email"
-    );
-    if (!reserva) throw { status: 404, message: "Reserva no encontrada" };
+    const reserva = await Reserva.findById(id).populate("usuario", "nombre email");
+    if (!reserva) {
+      throw { status: 404, message: "Reserva no encontrada" };
+    }
     return { status: 200, data: reserva };
   } catch (error) {
-    throw error.status
-      ? error
-      : { status: 500, message: "Error al obtener la reserva" };
+    throw error.status ? error : { status: 500, message: "Error al obtener la reserva" };
   }
 };
 
@@ -124,19 +125,21 @@ export const crearReserva = async (datosReserva, usuarioToken) => {
 export const actualizarReserva = async (id, datos) => {
   try {
     const reserva = await Reserva.findByIdAndUpdate(id, datos, { new: true });
-    if (!reserva) throw { status: 404, message: "Reserva no encontrada" };
+    if (!reserva) {
+      throw { status: 404, message: "Reserva no encontrada" };
+    }
     return { status: 200, data: reserva };
   } catch (error) {
-    throw error.status
-      ? error
-      : { status: 500, message: "Error al actualizar" };
+    throw error.status ? error : { status: 500, message: "Error al actualizar" };
   }
 };
 
 export const eliminarReserva = async (id) => {
   try {
     const reserva = await Reserva.findByIdAndDelete(id);
-    if (!reserva) throw { status: 404, message: "Reserva no encontrada" };
+    if (!reserva) {
+      throw { status: 404, message: "Reserva no encontrada" };
+    }
     return { status: 204, data: null };
   } catch (error) {
     throw error.status ? error : { status: 500, message: "Error al eliminar" };

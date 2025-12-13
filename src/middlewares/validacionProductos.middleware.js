@@ -9,9 +9,7 @@ export const validacionesCrearProducto = [
     .isLength({ min: 2, max: 50 })
     .withMessage("El nombre debe tener entre 2 y 50 caracteres")
     .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ0-9\s]+$/)
-    .withMessage(
-      "El nombre solo puede contener letras, números, espacios y caracteres en español"
-    )
+    .withMessage("El nombre solo puede contener letras, números, espacios y caracteres en español")
     .custom(async (value) => {
       const productoExistente = await ProductoModel.findOne({ nombre: value });
       if (productoExistente) {
@@ -27,9 +25,7 @@ export const validacionesCrearProducto = [
     .isLength({ min: 10, max: 500 })
     .withMessage("Debe ingresar una descripción entre 10 y 500 caracteres")
     .matches(/^[a-zA-ZÀ-ÿ0-9.,;:¡!¿?\-()'"%°\s]{10,500}$/u)
-    .withMessage(
-      "La descripción solo puede contener letras, números y espacios"
-    )
+    .withMessage("La descripción solo puede contener letras, números y espacios")
     .trim(),
 
   body("precio")
@@ -37,29 +33,21 @@ export const validacionesCrearProducto = [
     .matches(/^\d+(\.\d{1,2})?$/)
     .withMessage("El precio debe ser un número válido con hasta 2 decimales")
     .isFloat({ min: 0, max: 1000000 })
-    .withMessage(
-      "Debe ingresar un número válido para el precio y no mayor a $1.000.000"
-    ),
+    .withMessage("Debe ingresar un número válido para el precio y no mayor a $1.000.000"),
 
   body("categoria")
     .notEmpty()
     .withMessage("La categoría es obligatoria")
     .isIn(["entrada", "principal", "bebida", "postre"])
-    .withMessage(
-      "La categoría debe ser 'entrada','principal', 'bebida' o 'postre'"
-    ),
+    .withMessage("La categoría debe ser 'entrada','principal', 'bebida' o 'postre'"),
 
   body("imagen")
     .notEmpty()
     .withMessage("La imagen es obligatoria")
     .isURL()
     .withMessage("La imagen debe ser una URL válida")
-    .matches(
-      /^https?:\/\/[^\s?#]+\.(?:jpe?g|png|gif|svg|webp|bmp|tiff?)(\?[^\s#]*)?$/i
-    )
-    .withMessage(
-      "Solo se permiten imágenes (.jpg, .png, .gif, .svg, .webp, .bmp, .tiff)"
-    )
+    .matches(/^https?:\/\/[^\s?#]+\.(?:jpe?g|png|gif|svg|webp|bmp|tiff?)(\?[^\s#]*)?$/i)
+    .withMessage("Solo se permiten imágenes (.jpg, .png, .gif, .svg, .webp, .bmp, .tiff)")
     .matches(/^https:\/\/.+/)
     .withMessage("La imagen debe usar HTTPS"),
 
@@ -82,9 +70,7 @@ export const validacionesEditarProducto = [
     .isLength({ min: 10, max: 500 })
     .withMessage("Debe ingresar una descripción entre 10 y 100 caracteres")
     .matches(/^[a-zA-ZÀ-ÿ0-9.,;:¡!¿?\-()'"%°\s]{10,100}$/u)
-    .withMessage(
-      "La descripción solo puede contener letras, números y espacios"
-    )
+    .withMessage("La descripción solo puede contener letras, números y espacios")
     .trim(),
 
   body("precio")
@@ -92,27 +78,19 @@ export const validacionesEditarProducto = [
     .matches(/^\d+(\.\d{1,2})?$/)
     .withMessage("El precio debe ser un número válido con hasta 2 decimales")
     .isFloat({ min: 0, max: 1000000 })
-    .withMessage(
-      "Debe ingresar un número válido para el precio y no mayor a $1.000.000"
-    ),
+    .withMessage("Debe ingresar un número válido para el precio y no mayor a $1.000.000"),
 
   body("categoria")
     .optional()
     .isIn(["entrada", "principal", "bebida", "postre"])
-    .withMessage(
-      "La categoría debe ser 'entrada','principal', 'bebida' o 'postre'"
-    ),
+    .withMessage("La categoría debe ser 'entrada','principal', 'bebida' o 'postre'"),
 
   body("imagen")
     .optional()
     .isURL()
     .withMessage("La imagen debe ser una URL válida")
-    .matches(
-      /^https?:\/\/[^\s?#]+\.(?:jpe?g|png|gif|svg|webp|bmp|tiff?)(\?[^\s#]*)?$/i
-    )
-    .withMessage(
-      "Solo se permiten imágenes (.jpg, .png, .gif, .svg, .webp, .bmp, .tiff)"
-    )
+    .matches(/^https?:\/\/[^\s?#]+\.(?:jpe?g|png|gif|svg|webp|bmp|tiff?)(\?[^\s#]*)?$/i)
+    .withMessage("Solo se permiten imágenes (.jpg, .png, .gif, .svg, .webp, .bmp, .tiff)")
     .matches(/^https:\/\/.+/)
     .withMessage("La imagen debe usar HTTPS"),
 

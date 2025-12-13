@@ -4,7 +4,7 @@ import { validarTokenCliente } from "../middlewares/authClient.middleware.js";
 
 const router = Router();
 
-router.post("/crear-preferencia",validarTokenCliente, crearPreferencia);
+router.post("/crear-preferencia", validarTokenCliente, crearPreferencia);
 
 router.post("/webhook", recibirWebhook);
 

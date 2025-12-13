@@ -1,11 +1,15 @@
-import { actualizarReseniasService, crearReseniasService, eliminarReseniasService, obtenerReseniasPorIdService, obtenerReseniasService } from "../services/resenias.service.js";
-
-
+import {
+  actualizarReseniasService,
+  crearReseniasService,
+  eliminarReseniasService,
+  obtenerReseniasPorIdService,
+  obtenerReseniasService,
+} from "../services/resenias.service.js";
 
 export const obtenerReseniasController = async (req, res) => {
   try {
     const { msg, statusCode, data } = await obtenerReseniasService();
-    res.status(statusCode).json({msg, data});
+    res.status(statusCode).json({ msg, data });
   } catch (error) {
     res.status(400).json({ message: "Error al obtener reseñas" });
   }
@@ -15,7 +19,7 @@ export const obtenerReseniaPorIdController = async (req, res) => {
   try {
     const id = req.params.id;
     const { msg, statusCode, data } = await obtenerReseniasPorIdService(id);
-    res.status(statusCode).json({msg, data});
+    res.status(statusCode).json({ msg, data });
   } catch (error) {
     res.status(400).json({ message: "Error al obtener reseña" });
   }

@@ -1,9 +1,14 @@
 import { Preference, Payment } from "mercadopago";
 import { client } from "../config/config.mercadoPago.js";
 import Pedido from "../models/Pedido.js";
-import Usuario from "../models/Usuario.js"; // 
+import Usuario from "../models/Usuario.js";
 import pedidoService from "./pedido.service.js";
 
+/**
+ * Crear pedido y preferencia de Mercado Pago
+ * @param {Object} data - Datos del pedido y pago
+ * @returns {Promise<Object>} ID de preferencia e ID del pedido
+ */
 export const crearPedidoYPreferencia = async ({
   items,
   total,
@@ -11,28 +16,25 @@ export const crearPedidoYPreferencia = async ({
   telefono,
   emailUsuario,
 }) => {
-
   if (!items || items.length === 0) {
     throw new Error("El carrito está vacío");
   }
 
   const usuarioEncontrado = await Usuario.findOne({ email: emailUsuario });
-
   if (!usuarioEncontrado) {
     throw new Error("El usuario del token no existe en la base de datos");
   }
 
-  const idCliente = usuarioEncontrado._id; 
+  const idCliente = usuarioEncontrado._id;
 
   try {
-    const itemsParaDB = items.map((item) => ({
-      producto: item._id,
-      cantidad: item.quantity,
-    }));
-
+    // Crear pedido en la base de datos
     const nuevoPedido = new Pedido({
-      cliente: idCliente, 
-      items: itemsParaDB,
+      cliente: idCliente,
+      items: items.map((item) => ({
+        producto: item._id,
+        cantidad: item.cantidad || item.quantity,
+      })),
       total: total,
       estado: "pendiente",
       direccion: direccion || "Retiro en Local",
@@ -41,13 +43,14 @@ export const crearPedidoYPreferencia = async ({
 
     const pedidoGuardado = await nuevoPedido.save();
 
+    // Crear preferencia de Mercado Pago
     const preference = new Preference(client);
 
     const body = {
       items: items.map((item) => ({
-        title: item.nombre,
-        quantity: Number(item.quantity),
-        unit_price: Number(item.precio),
+        title: item.nombre || item.name,
+        quantity: Number(item.cantidad || item.quantity),
+        unit_price: Number(item.precio || item.price),
         currency_id: "ARS",
       })),
       external_reference: pedidoGuardado._id.toString(),
@@ -62,17 +65,23 @@ export const crearPedidoYPreferencia = async ({
 
     const resultadoMP = await preference.create({ body });
 
+    console.log(`✓ Preferencia creada: ${resultadoMP.id} para pedido ${pedidoGuardado._id}`);
+
     return {
       id: resultadoMP.id,
       idPedido: pedidoGuardado._id,
     };
   } catch (error) {
-    console.error("Error en servicio de pagos:", error);
+    console.error("❌ Error en servicio de pagos:", error.message);
     throw error;
   }
 };
 
-
+/**
+ * Procesar webhook de pago desde Mercado Pago
+ * @param {Object} query - Parámetros de query
+ * @param {Object} body - Cuerpo de la solicitud
+ */
 export const procesarWebhook = async (query, body) => {
   try {
     const topic = query.topic || query.type;
@@ -81,20 +90,24 @@ export const procesarWebhook = async (query, body) => {
     if (topic === "payment" || type === "payment") {
       const paymentId = query.id || body?.data?.id;
 
-      if (!paymentId) throw new Error("ID de pago no encontrado");
+      if (!paymentId) {
+        console.warn("⚠️  ID de pago no encontrado en webhook");
+        return;
+      }
 
       const payment = new Payment(client);
       const pagoData = await payment.get({ id: paymentId });
-      
-      if (pagoData.status === 'approved') {
+
+      if (pagoData.status === "approved") {
         const idPedido = pagoData.external_reference;
-        
-        console.log(`Pago recibido. Solicitando actualización de pedido ${idPedido}...`);
-        
+        console.log(`✓ Pago aprobado. Actualizando pedido ${idPedido}...`);
         await pedidoService.actualizarEstadoPedido(idPedido, "confirmado", true);
+      } else {
+        console.log(`⚠️  Pago ${paymentId} con estado: ${pagoData.status}`);
       }
     }
   } catch (error) {
-    console.error("Error webhook:", error.message);
+    console.error("❌ Error procesando webhook:", error.message);
+    // No lanzar error - Mercado Pago espera 200 OK
   }
 };

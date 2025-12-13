@@ -61,11 +61,10 @@ export const crearReseniasService = async (reseniaData) => {
 
 export const actualizarReseniasService = async (id, reseniaData) => {
   try {
-    const reseniaActualizada = await ReseniaModel.findByIdAndUpdate(
-      id,
-      reseniaData,
-      { new: true, runValidators: true }
-    );
+    const reseniaActualizada = await ReseniaModel.findByIdAndUpdate(id, reseniaData, {
+      new: true,
+      runValidators: true,
+    });
     if (!reseniaActualizada) {
       return {
         msg: "Resenia no encontrada",

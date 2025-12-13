@@ -38,10 +38,7 @@ export const crearProductoController = async (req, res) => {
 export const actualizarProductoController = async (req, res) => {
   try {
     const id = req.params.id;
-    const { msg, statusCode, data } = await actualizarProductoService(
-      id,
-      req.body
-    );
+    const { msg, statusCode, data } = await actualizarProductoService(id, req.body);
     res.status(statusCode).json({ msg, data });
   } catch (error) {
     res.status(400).json({ msg: "Error al actualizar producto" });
@@ -61,11 +58,7 @@ export const eliminarProductoController = async (req, res) => {
 export const obtenerProductosFiltradosController = async (req, res) => {
   try {
     const { category, page = 1, limit = 10 } = req.query;
-    const { msg, statusCode, data } = await obtenerProductosFiltradosService(
-      category,
-      page,
-      limit
-    );
+    const { msg, statusCode, data } = await obtenerProductosFiltradosService(category, page, limit);
     res.status(statusCode).json({ msg, data });
   } catch (error) {
     res.status(400).json({ msg: "Error al obtener productos filtrados" });

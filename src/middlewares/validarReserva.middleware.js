@@ -1,4 +1,4 @@
-import { body} from "express-validator";
+import { body } from "express-validator";
 import { handleValidationErrors } from "./validacionErrores.middleware.js";
 
 export const validarReserva = [
@@ -31,5 +31,5 @@ export const validarReserva = [
     .isLength({ max: 200 })
     .withMessage("Las notas no pueden superar los 200 caracteres"),
 
-    handleValidationErrors
+  handleValidationErrors,
 ];

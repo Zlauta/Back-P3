@@ -1,4 +1,4 @@
-import  contactoModel  from "../models/Contacto.js";
+import contactoModel from "../models/Contacto.js";
 
 export const crearContactoService = async (contactoData) => {
   try {
@@ -28,9 +28,7 @@ export const obtenerContactosService = async () => {
     };
   } catch (error) {
     return {
-      msg: `Error al obtener contactos: ${
-        error?.message || "Error desconocido"
-      }`,
+      msg: `Error al obtener contactos: ${error?.message || "Error desconocido"}`,
       statusCode: 400,
       data: null,
     };
@@ -54,9 +52,7 @@ export const obtenerContactoPorIdService = async (id) => {
     };
   } catch (error) {
     return {
-      msg: `Error al obtener contacto: ${
-        error?.message || "Error desconocido"
-      }`,
+      msg: `Error al obtener contacto: ${error?.message || "Error desconocido"}`,
       statusCode: 400,
       data: null,
     };
@@ -65,11 +61,10 @@ export const obtenerContactoPorIdService = async (id) => {
 
 export const actualizarContactoService = async (id, contactoData) => {
   try {
-    const contactoActualizado = await contactoModel.findByIdAndUpdate(
-      id,
-      contactoData,
-      { new: true, runValidators: true }
-    );
+    const contactoActualizado = await contactoModel.findByIdAndUpdate(id, contactoData, {
+      new: true,
+      runValidators: true,
+    });
     if (!contactoActualizado) {
       return {
         msg: "Contacto no encontrado",
@@ -84,9 +79,7 @@ export const actualizarContactoService = async (id, contactoData) => {
     };
   } catch (error) {
     return {
-      msg: `Error al actualizar contacto: ${
-        error?.message || "Error desconocido"
-      }`,
+      msg: `Error al actualizar contacto: ${error?.message || "Error desconocido"}`,
       statusCode: 400,
       data: null,
     };
@@ -110,9 +103,7 @@ export const eliminarContactoService = async (id) => {
     };
   } catch (error) {
     return {
-      msg: `Error al eliminar contacto: ${
-        error?.message || "Error desconocido"
-      }`,
+      msg: `Error al eliminar contacto: ${error?.message || "Error desconocido"}`,
       statusCode: 400,
       data: null,
     };

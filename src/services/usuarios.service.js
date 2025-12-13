@@ -15,9 +15,7 @@ export const registrarUsuarioService = async (body) => {
     console.error(error);
     return {
       statusCode: 400,
-      msg: `Error al registrar usuario: ${
-        error?.message || "Error desconocido"
-      }`,
+      msg: `Error al registrar usuario: ${error?.message || "Error desconocido"}`,
     };
   }
 };
@@ -25,22 +23,21 @@ export const registrarUsuarioService = async (body) => {
 export const loginUsuarioService = async (body) => {
   try {
     const usuarioExistente = await UsuarioModel.findOne({ email: body.email });
-    if (!usuarioExistente)
+    if (!usuarioExistente) {
       return {
         statusCode: 400,
         msg: "Usuario o contraseña incorrecto",
       };
+    }
 
-    const contraseniaOk = await argon.verify(
-      usuarioExistente.contrasenia,
-      body.contrasenia
-    );
+    const contraseniaOk = await argon.verify(usuarioExistente.contrasenia, body.contrasenia);
 
-    if (!contraseniaOk)
+    if (!contraseniaOk) {
       return {
         statusCode: 400,
         msg: "Usuario o contraseña incorrecto",
       };
+    }
     const payload = {
       nombre: usuarioExistente.nombre,
       email: usuarioExistente.email,
@@ -96,14 +93,10 @@ export const editarUsuarioService = async (id, body, usuarioAuth) => {
       }
     }
 
-    const usuarioActualizadoBD = await UsuarioModel.findByIdAndUpdate(
-      id,
-      body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    const usuarioActualizadoBD = await UsuarioModel.findByIdAndUpdate(id, body, {
+      new: true,
+      runValidators: true,
+    });
 
     return {
       usuarioActualizadoBD,
@@ -112,9 +105,7 @@ export const editarUsuarioService = async (id, body, usuarioAuth) => {
     };
   } catch (error) {
     return {
-      msg: `Error al actualizar usuario: ${
-        error?.message || "Error desconocido"
-      }`,
+      msg: `Error al actualizar usuario: ${error?.message || "Error desconocido"}`,
       statusCode: 400,
     };
   }

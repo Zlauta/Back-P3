@@ -1,11 +1,4 @@
-export function generarTemplatesCorreo(
-  email,
-  nombre,
-  fecha,
-  hora,
-  mesa,
-  cantidadPersonas
-) {
+export function generarTemplatesCorreo(email, nombre, fecha, hora, mesa, cantidadPersonas) {
   const formatearFecha = (fechaInput) => {
     const fecha = new Date(fechaInput);
     const dia = String(fecha.getDate()).padStart(2, "0");

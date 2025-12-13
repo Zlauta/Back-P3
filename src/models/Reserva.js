@@ -7,18 +7,17 @@ const reservaSchema = new mongoose.Schema(
       ref: "Usuario",
       required: true,
     },
-
     mesa: {
       type: Number,
       required: true,
       min: 1,
-      max:35
+      max: 35,
     },
     cantidadPersonas: {
       type: Number,
       required: true,
       min: 1,
-      max:65
+      max: 65,
     },
     fecha: {
       type: Date,

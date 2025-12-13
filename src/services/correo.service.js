@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 
 export const enviarCorreoService = async (correoData) => {
   const mailOptions = {
-    from: '"El Gourmet" <' + userGmail + ">",
+    from: "\"El Gourmet\" <" + userGmail + ">",
     to: correoData.to,
     subject: correoData.subject,
     text: correoData.text,

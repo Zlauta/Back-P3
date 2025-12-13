@@ -7,7 +7,6 @@ import manejadorDeErrores from "./src/middlewares/manejadorDeErrores.js";
 
 connectDB();
 
-
 const app = express();
 
 app.use(cors());
@@ -15,11 +14,9 @@ app.use(express.json());
 app.use(morgan("dev"));
 const PORT = process.env.PORT || 3000;
 
-
-
 app.use("/api", routes);
 
-app.use(manejadorDeErrores)
+app.use(manejadorDeErrores);
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);

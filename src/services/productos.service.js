@@ -61,11 +61,10 @@ export const crearProductoService = async (productoData) => {
 
 export const actualizarProductoService = async (id, productoData) => {
   try {
-    const productoActualizado = await ProductoModel.findByIdAndUpdate(
-      id,
-      productoData,
-      { new: true, runValidators: true }
-    );
+    const productoActualizado = await ProductoModel.findByIdAndUpdate(id, productoData, {
+      new: true,
+      runValidators: true,
+    });
     if (!productoActualizado) {
       return {
         msg: "Producto no encontrado",
@@ -111,11 +110,7 @@ export const eliminarProductoService = async (id) => {
   }
 };
 
-export const obtenerProductosFiltradosService = async (
-  category,
-  page = 1,
-  limit = 10
-) => {
+export const obtenerProductosFiltradosService = async (category, page = 1, limit = 10) => {
   try {
     const filtro = category ? { categoria: category } : {};
     const skip = (Number(page) - 1) * Number(limit);

@@ -49,16 +49,10 @@ export const validacionesEditarContacto = [
     .isLength({ min: 2, max: 50 })
     .withMessage("El nombre debe tener entre 2 y 50 caracteres")
     .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]+$/)
-    .withMessage(
-      "El nombre solo puede contener letras, espacios y caracteres en español"
-    )
+    .withMessage("El nombre solo puede contener letras, espacios y caracteres en español")
     .trim(),
 
-  body("email")
-    .optional()
-    .isEmail()
-    .withMessage("Debe ingresar un email válido")
-    .normalizeEmail(),
+  body("email").optional().isEmail().withMessage("Debe ingresar un email válido").normalizeEmail(),
 
   body("telefono")
     .optional()
