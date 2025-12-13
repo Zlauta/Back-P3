@@ -37,7 +37,6 @@ export const obtenerPorId = async (req, res, next) => {
 
 export const editarPedido = async (req, res, next) => {
   const { id } = req.params;
-  // Extraemos todo el body para pasárselo al servicio
   const datosAEditar = req.body;
 
   try {
@@ -45,19 +44,16 @@ export const editarPedido = async (req, res, next) => {
 
     res.status(200).json(pedidoActualizado);
   } catch (error) {
-    // Manejo de errores simple basado en el mensaje que lanzamos en el servicio
+ 
     next(error);
   }
 };
 
 export const cambiarEstadoAdmin = async (req, res, next) => {
   const { id } = req.params;
-  const { estado } = req.body; // Ej: "preparando"
+  const { estado } = req.body;
 
   try {
-    // Llamamos a la máquina de estados con FALSE (es acción manual)
-    // Esto permitirá "confirmado" -> "preparando"
-    // Pero bloqueará "confirmado" -> "pendiente"
     const pedidoActualizado = await pedidoService.actualizarEstadoPedido(id, estado, false);
 
     res.json(pedidoActualizado);

@@ -28,7 +28,6 @@ export const crearPedidoYPreferencia = async ({
 
   const idCliente = usuarioEncontrado._id;
 
-  // Crear pedido en la base de datos
   const nuevoPedido = new Pedido({
     cliente: idCliente,
     items: items.map((item) => ({
@@ -43,7 +42,6 @@ export const crearPedidoYPreferencia = async ({
 
   const pedidoGuardado = await nuevoPedido.save();
 
-  // Crear preferencia de Mercado Pago
   const preference = new Preference(client);
 
   const body = {
@@ -104,6 +102,5 @@ export const procesarWebhook = async (query, body) => {
     }
   } catch (error) {
     console.error("❌ Error procesando webhook:", error.message);
-    // No lanzar error - Mercado Pago espera 200 OK
   }
 };

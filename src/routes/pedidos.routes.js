@@ -11,7 +11,6 @@ import { validarAdmin } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-// Endpoints CRUD para pedidos
 router.post("/", crear);
 router.get("/", listar);
 router.get("/:id", obtenerPorId);

@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// Esquema para los ítems del pedido
 const ItemPedidoSchema = new mongoose.Schema({
   producto: {
     type: mongoose.Schema.Types.ObjectId,
@@ -10,7 +9,6 @@ const ItemPedidoSchema = new mongoose.Schema({
   cantidad: { type: Number, required: true, min: 1 },
 });
 
-// Esquema principal para los pedidos
 const PedidoSchema = new mongoose.Schema(
   {
     cliente: {

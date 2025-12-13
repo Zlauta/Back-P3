@@ -54,7 +54,6 @@ export const editarUsuarioService = async (id, body, usuarioAuth) => {
     throw new AppError("Usuario no encontrado", 404);
   }
 
-  // Validar que el usuario autenticado no modifique su propio rol/estado
   if (usuarioAuth.email === usuarioTarget.email) {
     if ("rol" in body || "estado" in body) {
       throw new AppError("No puedes modificar tu propio rol ni estado", 403);
@@ -79,7 +78,6 @@ export const eliminarUsuarioService = async (id, usuarioAuth) => {
     throw new AppError("Usuario no encontrado", 404);
   }
 
-  // Evitar que un usuario se elimine a sí mismo
   if (usuarioAuth.email === usuarioTarget.email) {
     throw new AppError("No puedes eliminar tu propio usuario", 403);
   }
