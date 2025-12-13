@@ -1,6 +1,7 @@
 import { body, param } from "express-validator";
 import { handleValidationErrors } from "../middlewares/validacionErrores.middleware.js";
 import ProductoModel from "../models/Producto.js";
+import AppError from "../utils/appError.js";
 
 export const validacionesCrearProducto = [
   body("nombre")
@@ -13,7 +14,7 @@ export const validacionesCrearProducto = [
     .custom(async (value) => {
       const productoExistente = await ProductoModel.findOne({ nombre: value });
       if (productoExistente) {
-        throw new Error("El nombre del producto ya existe");
+        throw new AppError("El nombre del producto ya existe", 400);
       }
       return true;
     })
