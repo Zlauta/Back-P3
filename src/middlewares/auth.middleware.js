@@ -13,7 +13,7 @@ export function validarAutenticacion(req, res, next) {
     }
     next();
   } catch (error) {
-    res.status(403).json({ msg: "Error de autorizacion" });
+    next(error);
   }
 }
 
@@ -31,6 +31,6 @@ export function validarAdmin(req, res, next) {
     }
     next();
   } catch (error) {
-    res.status(403).json({ msg: "Error de autorizacion" });
+    next(error);
   }
 }

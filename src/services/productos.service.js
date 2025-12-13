@@ -9,6 +9,7 @@ export const obtenerProductosService = async () => {
       data: productos,
     };
   } catch (error) {
+    console.error(error);
     return {
       msg: "Error al obtener productos",
       statusCode: 400,
@@ -33,6 +34,7 @@ export const obtenerProductoPorIdService = async (id) => {
       data: producto,
     };
   } catch (error) {
+    console.error(error);
     return {
       msg: "Error al obtener producto",
       statusCode: 400,
@@ -51,6 +53,7 @@ export const crearProductoService = async (productoData) => {
       data: nuevoProducto,
     };
   } catch (error) {
+    console.error(error);
     return {
       msg: "Error al crear producto",
       statusCode: 400,
@@ -78,6 +81,7 @@ export const actualizarProductoService = async (id, productoData) => {
       data: productoActualizado,
     };
   } catch (error) {
+    console.error(error);
     return {
       msg: "Error al actualizar producto",
       statusCode: 400,
@@ -102,6 +106,7 @@ export const eliminarProductoService = async (id) => {
       data: productoEliminado,
     };
   } catch (error) {
+    console.error(error);
     return {
       msg: "Error al eliminar producto",
       statusCode: 400,
@@ -135,6 +140,7 @@ export const obtenerProductosFiltradosService = async (category, page = 1, limit
       },
     };
   } catch (error) {
+    console.error(error);
     return {
       msg: "Error al obtener productos filtrados",
       statusCode: 400,

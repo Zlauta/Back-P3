@@ -6,50 +6,50 @@ import {
   obtenerContactosService,
 } from "../services/contacto.service.js";
 
-export const crearContactoController = async (req, res) => {
+export const crearContactoController = async (req, res, next) => {
   try {
     const { msg, statusCode, data } = await crearContactoService(req.body);
     res.status(statusCode).json({ msg, data });
   } catch (error) {
-    res.status(400).json({ msg: "Error al crear contacto" });
+    next(error);
   }
 };
 
-export const obtenerContactosController = async (req, res) => {
+export const obtenerContactosController = async (req, res, next) => {
   try {
     const { msg, statusCode, data } = await obtenerContactosService();
     res.status(statusCode).json({ msg, data });
   } catch (error) {
-    res.status(400).json({ msg: "Error al obtener contactos" });
+    next(error);
   }
 };
 
-export const obtenerContactoPorIdController = async (req, res) => {
+export const obtenerContactoPorIdController = async (req, res, next) => {
   try {
     const id = req.params.id;
     const { msg, statusCode, data } = await obtenerContactoPorIdService(id);
     res.status(statusCode).json({ msg, data });
   } catch (error) {
-    res.status(400).json({ msg: "Error al obtener contacto" });
+    next(error);
   }
 };
 
-export const actualizarContactoController = async (req, res) => {
+export const actualizarContactoController = async (req, res, next) => {
   try {
     const id = req.params.id;
     const { msg, statusCode, data } = await actualizarContactoService(id, req.body);
     res.status(statusCode).json({ msg, data });
   } catch (error) {
-    res.status(400).json({ msg: "Error al actualizar contacto" });
+    next(error);
   }
 };
 
-export const eliminarContactoController = async (req, res) => {
+export const eliminarContactoController = async (req, res, next) => {
   try {
     const id = req.params.id;
     const { msg, statusCode, data } = await eliminarContactoService(id);
     res.status(statusCode).json({ msg, data });
   } catch (error) {
-    res.status(400).json({ msg: "Error al eliminar contacto" });
+    next(error);
   }
 };

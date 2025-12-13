@@ -9,6 +9,7 @@ export const obtenerReseniasService = async () => {
       data: resenias,
     };
   } catch (error) {
+    console.error(error);
     return {
       msg: "Error al obtener resenias",
       statusCode: 500,
@@ -33,6 +34,7 @@ export const obtenerReseniasPorIdService = async (id) => {
       data: resenia,
     };
   } catch (error) {
+    console.error(error);
     return {
       msg: "Error al obtener resenia",
       statusCode: 500,
@@ -51,6 +53,7 @@ export const crearReseniasService = async (reseniaData) => {
       data: nuevaResenia,
     };
   } catch (error) {
+    console.error(error);
     return {
       msg: "Error al crear resenia",
       statusCode: 500,
@@ -78,6 +81,7 @@ export const actualizarReseniasService = async (id, reseniaData) => {
       data: reseniaActualizada,
     };
   } catch (error) {
+    console.error(error);
     return {
       msg: "Error al actualizar resenia",
       statusCode: 500,
@@ -102,6 +106,7 @@ export const eliminarReseniasService = async (id) => {
       data: reseniaEliminada,
     };
   } catch (error) {
+    console.error(error);
     return {
       msg: "Error al eliminar resenia",
       statusCode: 500,

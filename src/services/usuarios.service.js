@@ -69,6 +69,7 @@ export const obtenerUsuariosService = async () => {
     const usuarios = await UsuarioModel.find();
     return usuarios;
   } catch (error) {
+    console.error(error);
     throw new Error("error al obtener usuarios");
   }
 };
@@ -104,6 +105,7 @@ export const editarUsuarioService = async (id, body, usuarioAuth) => {
       statusCode: 200,
     };
   } catch (error) {
+    console.error(error);
     return {
       msg: `Error al actualizar usuario: ${error?.message || "Error desconocido"}`,
       statusCode: 400,
@@ -138,6 +140,7 @@ export const eliminarUsuarioService = async (id, usuarioAuth) => {
       data: usuarioEliminado,
     };
   } catch (error) {
+    console.error(error);
     return {
       msg: "Error al eliminar usuario",
       statusCode: 500,

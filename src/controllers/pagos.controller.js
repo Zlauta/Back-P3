@@ -1,6 +1,6 @@
 import { crearPedidoYPreferencia, procesarWebhook } from "../services/pagos.service.js";
 
-export const crearPreferencia = async (req, res) => {
+export const crearPreferencia = async (req, res, next) => {
   try {
     const emailToken = req.usuario.email;
 
@@ -19,12 +19,7 @@ export const crearPreferencia = async (req, res) => {
     res.status(201).json(resultado);
   } catch (error) {
     console.error("Error controller pagos:", error.message);
-
-    if (error.message.includes("no existe") || error.message.includes("vacío")) {
-      return res.status(400).json({ mensaje: error.message });
-    }
-
-    res.status(500).json({ mensaje: "Error interno del servidor" });
+    next(error);
   }
 };
 

@@ -1,24 +1,24 @@
 import * as reservasService from "../services/reservas.service.js";
 
-export const obtenerReservas = async (req, res) => {
+export const obtenerReservas = async (req, res, next) => {
   try {
     const { status, data } = await reservasService.obtenerReservas(req.query);
     res.status(status).json(data);
   } catch (error) {
-    res.status(error.status || 500).json({ message: error.message });
+    next(error);
   }
 };
 
-export const obtenerReservaPorId = async (req, res) => {
+export const obtenerReservaPorId = async (req, res, next) => {
   try {
     const { status, data } = await reservasService.obtenerReservaPorId(req.params.id);
     res.status(status).json(data);
   } catch (error) {
-    res.status(error.status || 500).json({ message: error.message });
+    next(error);
   }
 };
 
-export const crearReserva = async (req, res) => {
+export const crearReserva = async (req, res, next) => {
   try {
     if (!req.usuario || !req.usuario.email) {
       return res.status(401).json({
@@ -31,27 +31,24 @@ export const crearReserva = async (req, res) => {
     res.status(resultado.status).json(resultado);
   } catch (error) {
     console.error("❌ Error al crear reserva:", error);
-    res.status(error.status || 500).json({
-      message: error.message || "Error interno del servidor",
-      details: error.details,
-    });
+    next(error);
   }
 };
 
-export const actualizarReserva = async (req, res) => {
+export const actualizarReserva = async (req, res, next) => {
   try {
     const { status, data } = await reservasService.actualizarReserva(req.params.id, req.body);
     res.status(status).json(data);
   } catch (error) {
-    res.status(error.status || 500).json({ message: error.message });
+    next(error);
   }
 };
 
-export const eliminarReserva = async (req, res) => {
+export const eliminarReserva = async (req, res, next) => {
   try {
     const { status, data } = await reservasService.eliminarReserva(req.params.id);
     res.status(status).json(data);
   } catch (error) {
-    res.status(error.status || 500).json({ message: error.message });
+    next(error);
   }
 };

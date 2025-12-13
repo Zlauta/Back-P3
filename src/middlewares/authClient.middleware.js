@@ -12,6 +12,6 @@ export function validarTokenCliente(req, res, next) {
 
     next();
   } catch (error) {
-    res.status(401).json({ msg: "Token inválido o expirado" });
+    next(error);
   }
 }

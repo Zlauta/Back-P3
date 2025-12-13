@@ -33,12 +33,12 @@ export const editarUsuarioController = async (req, res) => {
   }
 };
 
-export const eliminarUsuarioController = async (req, res) => {
+export const eliminarUsuarioController = async (req, res, next) => {
   try {
     const id = req.params.id;
     const { msg, statusCode, data } = await eliminarUsuarioService(id, req.usuario);
     res.status(statusCode).json({ msg, data });
   } catch (error) {
-    res.status(404).json({ msg: "Error al eliminar usuario" });
+    next(error);
   }
 };

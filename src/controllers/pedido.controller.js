@@ -1,26 +1,26 @@
 import pedidoService from "../services/pedido.service.js";
 
-export const crear = async (req, res) => {
+export const crear = async (req, res, next) => {
   try {
     const pedidoCreado = await pedidoService.crearPedido(req.body);
     res.status(201).json(pedidoCreado);
   } catch (error) {
     console.error("Error en crear:", error);
-    res.status(500).json({ message: "Error al crear el pedido", error: error.message });
+    next(error);
   }
 };
 
-export const listar = async (req, res) => {
+export const listar = async (req, res, next) => {
   try {
     const pedidos = await pedidoService.obtenerPedidos();
     res.json(pedidos);
   } catch (error) {
     console.error("Error en listar:", error);
-    res.status(500).json({ message: "Error al obtener pedidos", error: error.message });
+    next(error);
   }
 };
 
-export const obtenerPorId = async (req, res) => {
+export const obtenerPorId = async (req, res, next) => {
   try {
     const pedido = await pedidoService.obtenerPedidoPorId(req.params.id);
 
@@ -31,11 +31,11 @@ export const obtenerPorId = async (req, res) => {
     res.json(pedido);
   } catch (error) {
     console.error("Error en obtenerPorId:", error);
-    res.status(500).json({ message: "Error al obtener el pedido", error: error.message });
+    next(error);
   }
 };
 
-export const editarPedido = async (req, res) => {
+export const editarPedido = async (req, res, next) => {
   const { id } = req.params;
   // Extraemos todo el body para pasárselo al servicio
   const datosAEditar = req.body;
@@ -46,15 +46,11 @@ export const editarPedido = async (req, res) => {
     res.status(200).json(pedidoActualizado);
   } catch (error) {
     // Manejo de errores simple basado en el mensaje que lanzamos en el servicio
-    if (error.message.includes("no existe") || error.message.includes("⛔")) {
-      return res.status(400).json({ mensaje: error.message });
-    }
-
-    res.status(500).json({ mensaje: "Error interno al editar el pedido" });
+    next(error);
   }
 };
 
-export const cambiarEstadoAdmin = async (req, res) => {
+export const cambiarEstadoAdmin = async (req, res, next) => {
   const { id } = req.params;
   const { estado } = req.body; // Ej: "preparando"
 
@@ -66,11 +62,11 @@ export const cambiarEstadoAdmin = async (req, res) => {
 
     res.json(pedidoActualizado);
   } catch (error) {
-    res.status(400).json({ mensaje: error.message });
+    next(error);
   }
 };
 
-export const eliminar = async (req, res) => {
+export const eliminar = async (req, res, next) => {
   try {
     const pedidoEliminado = await pedidoService.eliminarPedido(req.params.id);
 
@@ -81,6 +77,6 @@ export const eliminar = async (req, res) => {
     res.json({ message: "Pedido eliminado correctamente" });
   } catch (error) {
     console.error("Error en eliminar:", error);
-    res.status(500).json({ message: "Error al eliminar pedido", error: error.message });
+    next(error);
   }
 };
