@@ -31,7 +31,6 @@ export const crearReserva = async (req, res) => {
     const resultado = await reservasService.crearReserva(req.body, req.usuario);
 
     res.status(resultado.status).json(resultado);
-    
   } catch (error) {
     console.error("❌ Error al crear reserva:", error);
     res.status(error.status || 500).json({
@@ -57,6 +56,17 @@ export const eliminarReserva = async (req, res) => {
   try {
     const { status, data } = await reservasService.eliminarReserva(
       req.params.id
+    );
+    res.status(status).json(data);
+  } catch (error) {
+    res.status(error.status || 500).json({ message: error.message });
+  }
+};
+
+export const obtenerMisReservas = async (req, res) => {
+  try {
+    const { status, data } = await reservasService.obtenerMisReservas(
+      req.query
     );
     res.status(status).json(data);
   } catch (error) {

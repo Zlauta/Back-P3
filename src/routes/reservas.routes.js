@@ -1,5 +1,12 @@
 import express from "express";
-import { actualizarReserva, crearReserva, eliminarReserva, obtenerReservaPorId, obtenerReservas } from "../controllers/reservas.controller.js";
+import {
+  actualizarReserva,
+  crearReserva,
+  eliminarReserva,
+  obtenerMisReservas,
+  obtenerReservaPorId,
+  obtenerReservas,
+} from "../controllers/reservas.controller.js";
 
 import { validarReserva } from "../middlewares/validarReserva.middleware.js";
 import { check } from "express-validator";
@@ -7,10 +14,11 @@ import { check } from "express-validator";
 const router = express.Router();
 
 router.get("/", obtenerReservas);
+router.get("/mis", obtenerMisReservas);
 
 router.get(
   "/:id",
-  [check("id", "El ID no es válido").isMongoId(),],
+  [check("id", "El ID no es válido").isMongoId()],
   obtenerReservaPorId
 );
 
