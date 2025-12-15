@@ -96,3 +96,31 @@ export const eliminarReserva = async (id) => {
   }
   return { status: 204, data: null };
 };
+
+export const obtenerMisReservas = async (filtros = {}) => {
+  try {
+    const query = {};
+    if (filtros.email) {
+      const usuario = await Usuario.findOne({ email: filtros.email });
+      if (usuario) {
+        query.usuario = usuario._id; // 👈 usar el id encontrado
+      } else {
+        // Si no existe el usuario, devolver array vacío
+        return { status: 200, data: [] };
+      }
+    }
+    if (filtros.fecha) query.fecha = { $gte: filtros.fecha };
+
+    const reservas = await Reserva.find(query)
+      .populate("usuario", "nombre email")
+      .sort({ fecha: 1, hora: 1 });
+
+    return { status: 200, data: reservas };
+  } catch (error) {
+    throw {
+      status: 500,
+      message: "Error al obtener mis reservas",
+      details: error.message,
+    };
+  }
+};

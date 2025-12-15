@@ -52,3 +52,14 @@ export const eliminarReserva = async (req, res, next) => {
     next(error);
   }
 };
+
+export const obtenerMisReservas = async (req, res) => {
+  try {
+    const { status, data } = await reservasService.obtenerMisReservas(
+      req.query
+    );
+    res.status(status).json(data);
+  } catch (error) {
+    res.status(error.status || 500).json({ message: error.message });
+  }
+};
