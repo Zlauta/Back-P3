@@ -5,15 +5,19 @@ import {
   eliminarContactoController,
   obtenerContactoPorIdController,
   obtenerContactosController,
+  responderContacto,
 } from "../controllers/contacto.controller.js";
 import {
   validacionesCrearContacto,
   validacionesEditarContacto,
+  validacionesResponderContacto,
 } from "../middlewares/validacionContacto.middleware.js";
 
 const router = Router();
-
+  
 router.post("/", validacionesCrearContacto, crearContactoController);
+
+router.post("/responder",validacionesResponderContacto, responderContacto);
 
 router.get("/", obtenerContactosController);
 

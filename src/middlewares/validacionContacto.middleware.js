@@ -72,3 +72,36 @@ export const validacionesEditarContacto = [
 
   handleValidationErrors,
 ];
+
+export const validacionesResponderContacto = [
+  body("emailDestino")
+    .notEmpty()
+    .withMessage("El email de destino es obligatorio")
+    .isEmail()
+    .withMessage("Debe ingresar un email válido")
+    .normalizeEmail(),
+
+  body("nombre")
+    .optional()
+    .isLength({ min: 2, max: 50 })
+    .withMessage("El nombre debe tener entre 2 y 50 caracteres")
+    .trim(),
+
+  body("asunto")
+    .notEmpty()
+    .withMessage("El asunto es obligatorio")
+    .isLength({ min: 3, max: 100 })
+    .withMessage("El asunto debe tener entre 3 y 100 caracteres")
+    .matches(/^[a-zA-ZÀ-ÿ0-9.,;:¡!¿?\-()'"%°\s]+$/u)
+    .withMessage("El asunto contiene caracteres no permitidos")
+    .trim(),
+
+  body("mensaje")
+    .notEmpty()
+    .withMessage("El mensaje es obligatorio")
+    .isLength({ min: 5, max: 2000 }) 
+    .withMessage("El mensaje debe tener entre 5 y 2000 caracteres")
+    .trim(),
+
+  handleValidationErrors,
+];
