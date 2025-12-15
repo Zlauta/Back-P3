@@ -30,10 +30,6 @@ router.put(
   actualizarReserva
 );
 
-router.delete(
-  "/:id",
-  [check("id", "El ID no es válido").isMongoId()],
-  eliminarReserva
-);
+router.delete("/:id", [check("id", "El ID no es válido").isMongoId()], eliminarReserva);
 
 export default router;

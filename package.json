@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "lint": "eslint src/ index.js --fix",
+    "format": "prettier --write \"src/**/*.js\" index.js"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +27,11 @@
     "nodemailer": "^7.0.11"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "@eslint/js": "^9.39.2",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.7.4"
   }
 }
