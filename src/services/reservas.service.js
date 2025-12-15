@@ -1,7 +1,7 @@
 import Reserva from "../models/Reserva.js";
 import Usuario from "../models/Usuario.js";
 import AppError from "../utils/appError.js";
-import { generarTemplatesCorreo } from "../utils/template.js";
+import { generarTemplatesCorreo } from "../utils/template.reservas.js";
 import { enviarCorreoService } from "./correo.service.js";
 
 export const obtenerReservas = async (filtros = {}) => {

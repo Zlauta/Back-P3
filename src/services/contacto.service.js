@@ -1,5 +1,7 @@
 import contactoModel from "../models/Contacto.js";
 import AppError from "../utils/appError.js";
+import { generarTemplateRespuestaContacto } from "../utils/template.contactos.js";
+import { enviarCorreoService } from "./correo.service.js";
 
 export const crearContactoService = async (contactoData) => {
   const nuevoContacto = new contactoModel(contactoData);
@@ -57,4 +59,28 @@ export const eliminarContactoService = async (id) => {
     statusCode: 200,
     data: contactoEliminado,
   };
+};
+
+export const enviarRespuestaEmail = async ({ emailDestino, nombre, asunto, mensaje }) => {
+  if (!emailDestino || !mensaje || !asunto) {
+    throw new AppError('Faltan datos obligatorios: Email, Asunto o Mensaje.', 400);
+  }
+
+  try {
+    const mailOptions = generarTemplateRespuestaContacto(
+      emailDestino, 
+      nombre, 
+      asunto, 
+      mensaje
+    );
+
+    const info = await enviarCorreoService(mailOptions);
+    return info;
+
+  } catch (error) {
+    console.error('Error interno al enviar email:', error);
+    if (error instanceof AppError) throw error;
+    
+    throw new AppError('No se pudo enviar el correo. Intente más tarde.', 500);
+  }
 };
