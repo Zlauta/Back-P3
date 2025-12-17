@@ -1,10 +1,14 @@
 import mongoose from "mongoose";
 
 const reseniaSchema = new mongoose.Schema({
+  usuario: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Usuario",
+    required: false,
+  },
   nombre: {
     type: String,
     required: true,
-    unique: true,
     trim: true,
     minLength: 2,
     maxLength: 50,
