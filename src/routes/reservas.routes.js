@@ -16,11 +16,7 @@ const router = express.Router();
 router.get("/", obtenerReservas);
 router.get("/mis", obtenerMisReservas);
 
-router.get(
-  "/:id",
-  [check("id", "El ID no es válido").isMongoId()],
-  obtenerReservaPorId
-);
+router.get("/:id", [check("id", "El ID no es válido").isMongoId()], obtenerReservaPorId);
 
 router.post("/", validarReserva, crearReserva);
 

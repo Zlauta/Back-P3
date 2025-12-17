@@ -44,7 +44,6 @@ export const editarPedido = async (req, res, next) => {
 
     res.status(200).json(pedidoActualizado);
   } catch (error) {
- 
     next(error);
   }
 };

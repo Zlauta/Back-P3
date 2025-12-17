@@ -25,7 +25,6 @@ export const crearPreferencia = async (req, res, next) => {
 
 export const recibirWebhook = async (req, res) => {
   try {
-
     await procesarWebhook(req.query, req.body);
 
     res.status(200).send("OK");
