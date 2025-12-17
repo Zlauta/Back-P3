@@ -1,22 +1,21 @@
 import mongoose from "mongoose";
 import PedidoModel from "../src/models/Pedido.js";
-import { connectDB } from "../src/config/config.db.js"; // Ajusta la ruta si tu seeder está en otra carpeta
+import { connectDB } from "../src/config/config.db.js";
 
 const seederPedidos = async () => {
   try {
-    // Conectamos a la DB usando tu configuración
     await connectDB();
 
     console.log("Conectado a MongoDB para seeder de pedidos");
 
-    // IDs que proporcionaste
+
     const usuarioId = "69153048d8b189c23f181099";
     const productosIds = [
       "69151787d5ddc699d20aa9d8",
       "6915ee27bc6a2b6c8320f643",
     ];
 
-    // Pedidos de ejemplo
+
     const pedidos = [
       {
         cliente: usuarioId,
@@ -41,11 +40,11 @@ const seederPedidos = async () => {
       },
     ];
 
-    // Limpiamos los pedidos existentes (opcional)
+
     await PedidoModel.deleteMany({});
     console.log("Pedidos anteriores eliminados");
 
-    // Insertamos los nuevos pedidos
+
     await PedidoModel.insertMany(pedidos);
     console.log("Pedidos seeders insertados correctamente");
 
@@ -56,5 +55,5 @@ const seederPedidos = async () => {
   }
 };
 
-// Ejecutar el seeder
+
 seederPedidos();

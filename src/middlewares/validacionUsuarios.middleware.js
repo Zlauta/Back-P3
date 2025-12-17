@@ -1,6 +1,7 @@
 import { body, param } from "express-validator";
 import { handleValidationErrors } from "../middlewares/validacionErrores.middleware.js";
 import UsuarioModel from "../models/Usuario.js";
+import AppError from "../utils/appError.js";
 
 export const crearUsuarioValidator = [
   body("nombre")
@@ -8,8 +9,8 @@ export const crearUsuarioValidator = [
     .withMessage("El nombre de usuario es requerido")
     .matches(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s'-]+$/)
     .withMessage("Solo se permiten letras")
-    .isLength({ min: 3, max: 30 })
-    .withMessage("El nombre debe tener entre 3 y 30 caracteres")
+    .isLength({ min: 2, max: 50 })
+    .withMessage("El nombre debe tener entre 2 y 50 caracteres")
     .trim(),
 
   body("email")
@@ -21,7 +22,7 @@ export const crearUsuarioValidator = [
     .custom(async (value) => {
       const emailExistente = await UsuarioModel.findOne({ email: value });
       if (emailExistente) {
-        throw new Error("El correo electrónico ya está en uso");
+        throw new AppError("El correo electrónico ya está en uso", 400);
       }
       return true;
     }),
@@ -29,11 +30,9 @@ export const crearUsuarioValidator = [
   body("contrasenia")
     .notEmpty()
     .withMessage("La contraseña es requerida")
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[\]{}]).{8,}$/
-    )
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=[\]{};':"\\|,.<>/?]).{8,}$/)
     .withMessage(
-      "La contraseña debe contener mayúsculas, minúsculas, números y caracteres especiales"
+      "La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial."
     ),
 
   body("rol")
@@ -49,9 +48,9 @@ export const crearUsuarioValidator = [
   body("telefono")
     .notEmpty()
     .withMessage("El teléfono es obligatorio")
-    .matches(/^\+?[1-9]\d{1,14}$/)
+    .matches(/^\+?[1-9]\d{7,14}$/)
     .withMessage(
-      "Debe ser un número de teléfono válido en formato internacional"
+      "El número de teléfono debe tener entre 8 y 15 dígitos, puede comenzar con “+” y no debe iniciar con 0."
     ),
   handleValidationErrors,
 ];
@@ -73,9 +72,9 @@ export const editarUsuarioValidator = [
 
   body("telefono")
     .optional()
-    .matches(/^\+?[1-9]\d{1,14}$/)
+    .matches(/^\+?[1-9]\d{7,14}$/)
     .withMessage(
-      "Debe ser un número de teléfono válido en formato internacional"
+      "El número de teléfono debe tener entre 8 y 15 dígitos, puede comenzar con “+” y no debe iniciar con 0."
     )
     .trim(),
 

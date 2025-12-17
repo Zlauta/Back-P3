@@ -1,10 +1,17 @@
 import mongoose from "mongoose";
 
 const reseniaSchema = new mongoose.Schema({
+  usuario: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Usuario",
+    required: false,
+  },
   nombre: {
     type: String,
     required: true,
     trim: true,
+    minLength: 2,
+    maxLength: 50,
   },
   comentario: {
     type: String,
@@ -19,11 +26,11 @@ const reseniaSchema = new mongoose.Schema({
   },
   activo: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   fecha: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
 });
 

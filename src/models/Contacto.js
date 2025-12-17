@@ -16,6 +16,7 @@ const contactoSchema = new Schema(
       type: String,
       required: true,
       trim: true,
+      match: /^\+?[1-9]\d{7,14}$/,
     },
     mensaje: {
       type: String,
@@ -36,4 +37,4 @@ const contactoSchema = new Schema(
 
 const contactoModel = model("contacto", contactoSchema);
 
-export default contactoModel
+export default contactoModel;

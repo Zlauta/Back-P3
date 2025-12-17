@@ -25,7 +25,7 @@ const productoSchema = new Schema(
     categoria: {
       type: String,
       required: true,
-      enum: ["entrada","principal", "bebida", "postre"],
+      enum: ["entrada", "principal", "bebida", "postre"],
     },
     imagen: {
       type: String,

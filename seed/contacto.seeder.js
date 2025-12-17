@@ -1,15 +1,12 @@
 import mongoose from "mongoose";
-// ⚠️ Nota las llaves { } porque en tu modelo usaste 'export const'
 import  contactoModel  from "../src/models/Contacto.js"; 
 import { connectDB } from "../src/config/config.db.js";
 
 const seederContactos = async () => {
   try {
-    // 1. Conectamos a la DB
     await connectDB();
     console.log("Conectado a MongoDB para seeder de contactos");
 
-    // 2. Definimos los contactos respetando tu Schema (nombre, email, telefono, mensaje, estado)
     const contactos = [
       {
         _id: new mongoose.Types.ObjectId(),
@@ -17,7 +14,7 @@ const seederContactos = async () => {
         email: "juan.perez@email.com",
         telefono: "+5491122334455",
         mensaje: "Hola, quisiera saber si tienen opciones sin TACC certificadas para este fin de semana.",
-        estado: "pendiente" // Coincide con tu enum
+        estado: "pendiente" 
       },
       {
         _id: new mongoose.Types.ObjectId(),
@@ -25,7 +22,7 @@ const seederContactos = async () => {
         email: "lucia.gomez@email.com",
         telefono: "+5493411122233",
         mensaje: "Quería avisar que ya realicé el pago de la seña para la reserva del sábado.",
-        estado: "resuelto" // Coincide con tu enum
+        estado: "resuelto" 
       },
       {
         _id: new mongoose.Types.ObjectId(),
@@ -45,15 +42,12 @@ const seederContactos = async () => {
       }
     ];
 
-    // 3. Limpiamos la colección existente
     await contactoModel.deleteMany({});
     console.log("Mensajes de contacto anteriores eliminados");
 
-    // 4. Insertamos los nuevos mensajes
     await contactoModel.insertMany(contactos);
     console.log("Mensajes de contacto insertados correctamente 📩");
 
-    // 5. Desconexión
     mongoose.disconnect();
   } catch (error) {
     console.error("Error en el seeder de contactos:", error);
@@ -61,5 +55,5 @@ const seederContactos = async () => {
   }
 };
 
-// Ejecutar el seeder
+
 seederContactos();

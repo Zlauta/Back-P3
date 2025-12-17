@@ -1,8 +1,6 @@
 import { body, param } from "express-validator";
 import { handleValidationErrors } from "./validacionErrores.middleware.js";
 
-
-
 export const validacionesCrearResenia = [
   body("nombre")
     .notEmpty()
@@ -19,7 +17,9 @@ export const validacionesCrearResenia = [
     .isLength({ min: 5, max: 300 })
     .withMessage("El comentario debe tener entre 5 y 300 caracteres")
     .matches(/^[a-zA-Z0-9\s.,!?]+$/)
-    .withMessage("El comentario solo puede contener letras, números, espacios y signos básicos (.,!?)")
+    .withMessage(
+      "El comentario solo puede contener letras, números, espacios y signos básicos (.,!?)"
+    )
     .trim(),
 
   body("calificacion")
@@ -47,7 +47,9 @@ export const validacionesEditarResenia = [
     .isLength({ min: 5, max: 300 })
     .withMessage("El comentario debe tener entre 5 y 300 caracteres")
     .matches(/^[a-zA-Z0-9\s.,!?]+$/)
-    .withMessage("El comentario solo puede contener letras, números, espacios y signos básicos (.,!?)")
+    .withMessage(
+      "El comentario solo puede contener letras, números, espacios y signos básicos (.,!?)"
+    )
     .trim(),
 
   body("calificacion")
