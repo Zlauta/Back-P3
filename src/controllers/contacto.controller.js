@@ -59,19 +59,18 @@ export const responderContacto = async (req, res, next) => {
   try {
     const { emailDestino, nombre, asunto, mensaje } = req.body;
 
-    const info = await enviarRespuestaEmail({ 
-      emailDestino, 
-      nombre, 
-      asunto, 
-      mensaje 
+    const info = await enviarRespuestaEmail({
+      emailDestino,
+      nombre,
+      asunto,
+      mensaje,
     });
 
-    res.status(200).json({ 
-      status: 'success',
-      msg: 'Correo enviado exitosamente', 
-      infoId: info.messageId
+    res.status(200).json({
+      status: "success",
+      msg: "Correo enviado exitosamente",
+      infoId: info.messageId,
     });
-
   } catch (error) {
     next(error);
   }

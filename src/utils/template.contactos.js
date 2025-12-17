@@ -1,7 +1,5 @@
-// helpers/plantillasCorreo.js
-
 export function generarTemplateRespuestaContacto(email, nombre, asunto, mensajeRespuesta) {
-  const mensajeFormateado = mensajeRespuesta.replace(/\n/g, '<br>');
+  const mensajeFormateado = mensajeRespuesta.replace(/\n/g, "<br>");
 
   const correoData = {
     from: `"Soporte El Gourmet" <${process.env.EMAIL_USER}>`,

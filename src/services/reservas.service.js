@@ -103,9 +103,8 @@ export const obtenerMisReservas = async (filtros = {}) => {
     if (filtros.email) {
       const usuario = await Usuario.findOne({ email: filtros.email });
       if (usuario) {
-        query.usuario = usuario._id; // 👈 usar el id encontrado
+        query.usuario = usuario._id;
       } else {
-        // Si no existe el usuario, devolver array vacío
         return { status: 200, data: [] };
       }
     }

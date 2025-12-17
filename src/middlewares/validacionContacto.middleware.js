@@ -99,7 +99,7 @@ export const validacionesResponderContacto = [
   body("mensaje")
     .notEmpty()
     .withMessage("El mensaje es obligatorio")
-    .isLength({ min: 5, max: 2000 }) 
+    .isLength({ min: 5, max: 2000 })
     .withMessage("El mensaje debe tener entre 5 y 2000 caracteres")
     .trim(),
 
