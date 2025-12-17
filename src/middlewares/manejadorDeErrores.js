@@ -6,7 +6,13 @@ const handleCastErrorDB = (err) => {
 };
 
 const handleDuplicateFieldsDB = (err) => {
-  const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+
+  const textoError = err.errmsg || err.message || "";
+
+  const match = textoError.match(/(["'])(\\?.)*?\1/);
+
+  const value = match ? match[0] : "campo duplicado";
+
   const message = `Valor duplicado: ${value}. Por favor usá otro.`;
   return new AppError(message, 400);
 };
