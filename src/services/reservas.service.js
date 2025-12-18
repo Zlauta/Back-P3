@@ -47,12 +47,9 @@ export const crearReserva = async (datosReserva, usuarioToken) => {
     usuario: usuarioReal._id,
   });
 
+
   await nuevaReserva.save();
 
-  let resultadoCorreo = {
-    enviado: false,
-    mensaje: "No se pudo enviar el correo",
-  };
 
   try {
     const correoData = generarTemplatesCorreo(
@@ -64,20 +61,20 @@ export const crearReserva = async (datosReserva, usuarioToken) => {
       datosReserva.cantidadPersonas
     );
 
-    const envio = await enviarCorreoService(correoData);
 
-    resultadoCorreo = {
-      enviado: envio.statusCode === 200,
-      mensaje: envio.msg,
-    };
+    enviarCorreoService(correoData)
+      .then(() => console.log(`Correo enviado en segundo plano a ${usuarioToken.email}`))
+      .catch((err) => console.error("Error enviando correo en segundo plano:", err));
+
   } catch (errorCorreo) {
-    console.error("Error al enviar correo:", errorCorreo.message);
+    console.error("Error generando template de correo:", errorCorreo.message);
   }
+
 
   return {
     status: 201,
     data: nuevaReserva,
-    correo: resultadoCorreo,
+    mensaje: "Reserva creada con éxito. La confirmación llegará a su correo en breve.",
   };
 };
 

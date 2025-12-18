@@ -5,7 +5,11 @@ const userGmail = process.env.GMAIL_USER;
 const passAppGmail = process.env.GMAIL_APP_PASSWORD;
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  pool: true,
+  maxConnections: 1,
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
   auth: {
     user: userGmail,
     pass: passAppGmail,
