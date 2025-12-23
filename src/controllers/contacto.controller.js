@@ -59,17 +59,17 @@ export const responderContacto = async (req, res, next) => {
   try {
     const { emailDestino, nombre, asunto, mensaje } = req.body;
 
-    const info = await enviarRespuestaEmail({
+    enviarRespuestaEmail({
       emailDestino,
       nombre,
       asunto,
       mensaje,
-    });
+    }).catch(() => {});
 
     res.status(200).json({
       status: "success",
-      msg: "Correo enviado exitosamente",
-      infoId: info.messageId,
+      msg: "La respuesta se está procesando en segundo plano",
+      
     });
   } catch (error) {
     next(error);
