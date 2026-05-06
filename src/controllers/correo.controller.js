@@ -3,7 +3,7 @@ import { enviarCorreoService } from "../services/correo.service.js";
 export const enviarCorreoController = async (req, res, next) => {
   try {
 
-    enviarCorreoService(req.body).catch(() => { });
+   await enviarCorreoService(req.body).catch(() => { });
 
     res.status(200).json({
       status: "success",
