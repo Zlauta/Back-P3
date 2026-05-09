@@ -10,13 +10,15 @@ import {
   validacionesCrearResenia,
   validacionesEditarResenia,
 } from "../middlewares/validacionResenias.middleware.js";
+import { validarAutenticacion } from "../middlewares/auth.middleware.js";
+import { verificarDuenoResenia } from "../middlewares/verificarDuenoResenia.middleware.js";
 
 const router = Router();
 
 router.get("/", obtenerReseniasController);
 router.get("/:id", obtenerReseniaPorIdController);
 router.post("/", validacionesCrearResenia, crearReseniasController);
-router.put("/:id", validacionesEditarResenia, actualizarReseniasController);
-router.delete("/:id", eliminarReseniasController);
+router.put("/:id", validarAutenticacion, verificarDuenoResenia, validacionesEditarResenia, actualizarReseniasController);
+router.delete("/:id", validarAutenticacion, verificarDuenoResenia, eliminarReseniasController);
 
 export default router;
