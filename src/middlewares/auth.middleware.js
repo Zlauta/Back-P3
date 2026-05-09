@@ -8,6 +8,8 @@ export function validarAutenticacion(req, res, next) {
     }
     const token = rawToken?.split(" ")[1];
     const usuario = jwt.verify(token, process.env.SECRET_KEY);
+    req.usuario = usuario;
+    next();
     if (!usuario) {
       res.status(403).json({ msg: "Usuario no autorizado" });
     }
