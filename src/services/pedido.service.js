@@ -1,4 +1,5 @@
 import Pedido from "../models/Pedido.js";
+import Usuario from "../models/Usuario.js";
 import AppError from "../utils/appError.js";
 
 const formatearPedido = (pedido) => {
@@ -31,35 +32,70 @@ const formatearPedido = (pedido) => {
   };
 };
 
-async function crearPedido(datosPedido) {
+async function crearPedido(datosPedido, usuarioToken) {
+  const usuario = await Usuario.findOne({ email: usuarioToken.email });
+  if (!usuario) {
+    throw new AppError("Usuario no encontrado", 404);
+  }
+
+  datosPedido.cliente = usuario._id;
+
   const nuevoPedido = new Pedido(datosPedido);
   return await nuevoPedido.save();
 }
 
-async function obtenerPedidos(filtro = {}) {
+async function obtenerPedidos(filtro = {}, usuarioToken) {
+  const usuario = await Usuario.findOne({ email: usuarioToken.email });
+  if (!usuario) {
+    throw new AppError("Usuario no encontrado", 404);
+  }
+
+  if (usuario.rol !== "admin") {
+    filtro.cliente = usuario._id;
+  }
+
   const pedidos = await Pedido.find(filtro)
     .populate("items.producto")
     .populate("cliente")
     .sort({ createdAt: -1 })
     .lean();
+
   return pedidos.map((pedido) => formatearPedido(pedido));
 }
 
-async function obtenerPedidoPorId(id) {
+async function obtenerPedidoPorId(id, usuarioToken) {
+  const usuario = await Usuario.findOne({ email: usuarioToken.email });
+  if (!usuario) throw new AppError("Usuario no encontrado", 404);
+
   const pedido = await Pedido.findById(id).populate("items.producto").populate("cliente").lean();
 
   if (!pedido) {
     return null;
   }
 
+  if (
+    pedido.cliente &&
+    pedido.cliente._id.toString() !== usuario._id.toString() &&
+    usuario.rol !== "admin"
+  ) {
+    throw new AppError("No tienes permisos para ver este pedido", 403);
+  }
+
   return formatearPedido(pedido);
 }
 
-export const modificarPedidoUsuario = async (id, { items, direccion, telefono }) => {
+export const modificarPedidoUsuario = async (id, { items, direccion, telefono }, usuarioToken) => {
+  const usuario = await Usuario.findOne({ email: usuarioToken.email });
+  if (!usuario) throw new AppError("Usuario no encontrado", 404);
+
   const pedido = await Pedido.findById(id);
 
   if (!pedido) {
     throw new AppError("El pedido no existe", 404);
+  }
+
+  if (pedido.cliente.toString() !== usuario._id.toString() && usuario.rol !== "admin") {
+    throw new AppError("No tienes permisos para modificar este pedido", 403);
   }
 
   if (pedido.estado !== "pendiente") {
@@ -124,7 +160,18 @@ export const actualizarEstadoPedido = async (id, nuevoEstado, esWebhook = false)
 
   return await pedido.save();
 };
-async function eliminarPedido(id) {
+
+async function eliminarPedido(id, usuarioToken) {
+  const usuario = await Usuario.findOne({ email: usuarioToken.email });
+  if (!usuario) throw new AppError("Usuario no encontrado", 404);
+
+  const pedido = await Pedido.findById(id);
+  if (!pedido) throw new AppError("Pedido no encontrado", 404);
+
+  if (pedido.cliente.toString() !== usuario._id.toString() && usuario.rol !== "admin") {
+    throw new AppError("No tienes permisos para eliminar este pedido", 403);
+  }
+
   return Pedido.findByIdAndDelete(id).lean();
 }
 
@@ -132,6 +179,7 @@ export default {
   crearPedido,
   obtenerPedidos,
   obtenerPedidoPorId,
+  modificarPedidoUsuario,
   actualizarEstadoPedido,
   eliminarPedido,
 };
