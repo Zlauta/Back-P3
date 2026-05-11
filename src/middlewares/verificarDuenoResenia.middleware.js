@@ -1,4 +1,4 @@
-import ReseniaModel from "../models/resenia.model.js";
+import ReseniaModel from "../models/Resenias.js";
 
 export async function verificarDuenoResenia(req, res, next) {
   try {

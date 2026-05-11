@@ -25,6 +25,7 @@ export const loginUsuarioService = async (body) => {
     throw new AppError("Usuario o contraseña incorrecto", 400);
   }
   const payload = {
+    _id: usuarioExistente._id,
     nombre: usuarioExistente.nombre,
     email: usuarioExistente.email,
     rol: usuarioExistente.rol,
@@ -44,7 +45,7 @@ export const loginUsuarioService = async (body) => {
 };
 
 export const obtenerUsuariosService = async () => {
-  const usuarios = await UsuarioModel.find();
+  const usuarios = await UsuarioModel.find().select('-contrasenia');
   return usuarios;
 };
 
