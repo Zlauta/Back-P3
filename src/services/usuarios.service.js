@@ -44,7 +44,7 @@ export const loginUsuarioService = async (body) => {
 };
 
 export const obtenerUsuariosService = async () => {
-  const usuarios = await UsuarioModel.find();
+  const usuarios = await UsuarioModel.find().select('-contrasenia');
   return usuarios;
 };
 
