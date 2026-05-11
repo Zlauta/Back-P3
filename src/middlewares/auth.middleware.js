@@ -36,3 +36,19 @@ export function validarAdmin(req, res, next) {
     next(error);
   }
 }
+export function validarAutenticacionOpcional(req, res, next) {
+    try {
+      const rawToken = req.headers.authorization;
+      if (!rawToken?.startsWith("Bearer")) {
+        return next();
+      }
+      const token = rawToken?.split(" ")[1];
+      const usuario = jwt.verify(token, process.env.SECRET_KEY);
+      req.usuario = usuario;
+      next();
+    } catch (error) {
+      next();
+    }
+  }
+
+
