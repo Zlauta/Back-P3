@@ -27,7 +27,11 @@ export const obtenerReseniaPorIdController = async (req, res, next) => {
 
 export const crearReseniasController = async (req, res, next) => {
   try {
-    const { msg, statusCode, data } = await crearReseniasService(req.body);
+    const body = req.body;
+    if (req.usuario) {
+      body.usuario = req.usuario._id;
+    }
+    const { msg, statusCode, data } = await crearReseniasService(body);
     res.status(statusCode).json({ msg, data });
   } catch (error) {
     next(error);
