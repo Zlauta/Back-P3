@@ -2,7 +2,7 @@ import pedidoService from "../services/pedido.service.js";
 
 export const crear = async (req, res, next) => {
   try {
-    const pedidoCreado = await pedidoService.crearPedido(req.body);
+    const pedidoCreado = await pedidoService.crearPedido(req.body, req.usuario);
     res.status(201).json(pedidoCreado);
   } catch (error) {
     console.error("Error en crear:", error);
@@ -12,7 +12,7 @@ export const crear = async (req, res, next) => {
 
 export const listar = async (req, res, next) => {
   try {
-    const pedidos = await pedidoService.obtenerPedidos();
+    const pedidos = await pedidoService.obtenerPedidos({}, req.usuario);
     res.json(pedidos);
   } catch (error) {
     console.error("Error en listar:", error);
@@ -22,7 +22,7 @@ export const listar = async (req, res, next) => {
 
 export const obtenerPorId = async (req, res, next) => {
   try {
-    const pedido = await pedidoService.obtenerPedidoPorId(req.params.id);
+    const pedido = await pedidoService.obtenerPedidoPorId(req.params.id, req.usuario);
 
     if (!pedido) {
       return res.status(404).json({ message: "Pedido no encontrado" });
@@ -40,7 +40,7 @@ export const editarPedido = async (req, res, next) => {
   const datosAEditar = req.body;
 
   try {
-    const pedidoActualizado = await pedidoService.modificarPedidoUsuario(id, datosAEditar);
+    const pedidoActualizado = await pedidoService.modificarPedidoUsuario(id, datosAEditar, req.usuario);
 
     res.status(200).json(pedidoActualizado);
   } catch (error) {
@@ -63,7 +63,7 @@ export const cambiarEstadoAdmin = async (req, res, next) => {
 
 export const eliminar = async (req, res, next) => {
   try {
-    const pedidoEliminado = await pedidoService.eliminarPedido(req.params.id);
+    const pedidoEliminado = await pedidoService.eliminarPedido(req.params.id, req.usuario);
 
     if (!pedidoEliminado) {
       return res.status(404).json({ message: "Pedido no encontrado" });

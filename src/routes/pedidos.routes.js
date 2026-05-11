@@ -7,15 +7,16 @@ import {
   cambiarEstadoAdmin,
   editarPedido,
 } from "../controllers/pedido.controller.js";
-import { validarAdmin } from "../middlewares/auth.middleware.js";
+import { validarAdmin, validarAutenticacion } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.post("/", crear);
-router.get("/", listar);
-router.get("/:id", obtenerPorId);
-router.put("/:id", editarPedido);
+router.post("/", validarAutenticacion, crear);
+router.get("/", validarAutenticacion, listar);
+router.get("/:id", validarAutenticacion, obtenerPorId);
+router.put("/:id", validarAutenticacion, editarPedido);
+router.delete("/:id", validarAutenticacion, eliminar);
+
 router.patch("/:id/estado", validarAdmin, cambiarEstadoAdmin);
-router.delete("/:id", eliminar);
 
 export default router;
