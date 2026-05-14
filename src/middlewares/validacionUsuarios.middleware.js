@@ -37,13 +37,9 @@ export const crearUsuarioValidator = [
 
   body("rol")
     .optional()
-    .isIn(["admin", "cliente"])
-    .withMessage("El rol debe ser 'admin' o 'cliente'"),
+    .isIn(["cliente"])
+    .withMessage("El rol debe ser 'cliente'"),
 
-  body("estado")
-    .optional()
-    .isIn(["activo", "inactivo"])
-    .withMessage("El estado debe ser 'activo' o 'inactivo'"),
 
   body("telefono")
     .notEmpty()
