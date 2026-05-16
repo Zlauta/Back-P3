@@ -11,6 +11,7 @@ import {
   validacionesCrearProducto,
   validacionesEditarProducto,
 } from "../middlewares/validacionProductos.middleware.js";
+import { validarAdmin } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
@@ -20,10 +21,10 @@ router.get("/filtrados", obtenerProductosFiltradosController);
 
 router.get("/:id", obtenerProductoPorIdController);
 
-router.post("/", validacionesCrearProducto, crearProductoController);
+router.post("/", validacionesCrearProducto, validarAdmin, crearProductoController);
 
-router.put("/:id", validacionesEditarProducto, actualizarProductoController);
+router.put("/:id", validacionesEditarProducto, validarAdmin, actualizarProductoController);
 
-router.delete("/:id", eliminarProductoController);
+router.delete("/:id", validarAdmin, eliminarProductoController);
 
 export default router;
