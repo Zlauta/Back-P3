@@ -2,7 +2,7 @@ import * as reservasService from "../services/reservas.service.js";
 
 export const obtenerReservas = async (req, res, next) => {
   try {
-    const { status, data } = await reservasService.obtenerReservas(req.query);
+    const { status, data } = await reservasService.obtenerReservas(req.query, req.usuario);
     res.status(status).json(data);
   } catch (error) {
     next(error);
@@ -37,7 +37,11 @@ export const crearReserva = async (req, res, next) => {
 
 export const actualizarReserva = async (req, res, next) => {
   try {
-    const { status, data } = await reservasService.actualizarReserva(req.params.id, req.body);
+    const { status, data } = await reservasService.actualizarReserva(
+      req.params.id,
+      req.body,
+      req.usuario
+    );
     res.status(status).json(data);
   } catch (error) {
     next(error);
@@ -46,7 +50,7 @@ export const actualizarReserva = async (req, res, next) => {
 
 export const eliminarReserva = async (req, res, next) => {
   try {
-    const { status, data } = await reservasService.eliminarReserva(req.params.id);
+    const { status, data } = await reservasService.eliminarReserva(req.params.id, req.usuario);
     res.status(status).json(data);
   } catch (error) {
     next(error);
@@ -55,7 +59,7 @@ export const eliminarReserva = async (req, res, next) => {
 
 export const obtenerMisReservas = async (req, res, next) => {
   try {
-    const { status, data } = await reservasService.obtenerMisReservas(req.query);
+    const { status, data } = await reservasService.obtenerMisReservas(req.query, req.usuario);
     res.status(status).json(data);
   } catch (error) {
     next(error);
