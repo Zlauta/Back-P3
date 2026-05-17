@@ -4,14 +4,13 @@ export function validarAutenticacion(req, res, next) {
   try {
     const rawToken = req.headers.authorization;
     if (!rawToken?.startsWith("Bearer")) {
-      res.status(401).json({ msg: "Formato de Token inválido" });
+      return res.status(401).json({ msg: "Formato de Token inválido" });
     }
     const token = rawToken?.split(" ")[1];
     const usuario = jwt.verify(token, process.env.SECRET_KEY);
     req.usuario = usuario;
-    next();
     if (!usuario) {
-      res.status(403).json({ msg: "Usuario no autorizado" });
+      return res.status(403).json({ msg: "Usuario no autorizado" });
     }
     next();
   } catch (error) {
@@ -23,13 +22,13 @@ export function validarAdmin(req, res, next) {
   try {
     const rawToken = req.headers.authorization;
     if (!rawToken?.startsWith("Bearer")) {
-      res.status(401).json({ msg: "Formato de Token inválido" });
+      return res.status(401).json({ msg: "Formato de Token inválido" });
     }
     const token = rawToken?.split(" ")[1];
     const usuario = jwt.verify(token, process.env.SECRET_KEY);
     req.usuario = usuario;
     if (usuario.rol !== "admin") {
-      res.status(403).json({ msg: "Usuario no autorizado" });
+      return res.status(403).json({ msg: "Usuario no autorizado" });
     }
     next();
   } catch (error) {
@@ -37,18 +36,16 @@ export function validarAdmin(req, res, next) {
   }
 }
 export function validarAutenticacionOpcional(req, res, next) {
-    try {
-      const rawToken = req.headers.authorization;
-      if (!rawToken?.startsWith("Bearer")) {
-        return next();
-      }
-      const token = rawToken?.split(" ")[1];
-      const usuario = jwt.verify(token, process.env.SECRET_KEY);
-      req.usuario = usuario;
-      next();
-    } catch (error) {
-      next();
+  try {
+    const rawToken = req.headers.authorization;
+    if (!rawToken?.startsWith("Bearer")) {
+      return next();
     }
+    const token = rawToken?.split(" ")[1];
+    const usuario = jwt.verify(token, process.env.SECRET_KEY);
+    req.usuario = usuario;
+    return next();
+  } catch (error) {
+    next();
   }
-
-
+}
