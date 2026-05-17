@@ -4,7 +4,8 @@ import jwt from "jsonwebtoken";
 import AppError from "../utils/appError.js";
 
 export const registrarUsuarioService = async (body) => {
-  const nuevoUsuarioDB = new UsuarioModel(body);
+  const { email, nombre, contrasenia, telefono } = body;
+  const nuevoUsuarioDB = new UsuarioModel({ email, nombre, contrasenia, telefono });
   nuevoUsuarioDB.contrasenia = await argon.hash(nuevoUsuarioDB.contrasenia);
   await nuevoUsuarioDB.save();
   return {
@@ -61,7 +62,17 @@ export const editarUsuarioService = async (id, body, usuarioAuth) => {
     }
   }
 
-  const usuarioActualizadoBD = await UsuarioModel.findByIdAndUpdate(id, body, {
+  // Extraemos solo lo que permitimos editar desde este endpoint
+  const { nombre, telefono, rol, estado } = body;
+  
+  // Creamos un objeto limpio solo con los campos que sí vinieron
+  const datosAActualizar = {};
+  if (nombre) datosAActualizar.nombre = nombre;
+  if (telefono) datosAActualizar.telefono = telefono;
+  if (rol) datosAActualizar.rol = rol;
+  if (estado) datosAActualizar.estado = estado;
+
+  const usuarioActualizadoBD = await UsuarioModel.findByIdAndUpdate(id, datosAActualizar, {
     new: true,
     runValidators: true,
   });
