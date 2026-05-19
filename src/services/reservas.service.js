@@ -86,9 +86,9 @@ export const crearReserva = async (datosReserva, usuarioToken) => {
       datosReserva.cantidadPersonas
     );
 
-    enviarCorreoService(correoData)
-      .then(() => console.log(`Correo enviado en segundo plano a ${usuarioToken.email}`))
-      .catch((err) => console.error("Error enviando correo en segundo plano:", err));
+    enviarCorreoService(correoData).catch((err) =>
+      console.error("Error enviando correo en segundo plano:", err)
+    );
   } catch (errorCorreo) {
     console.error("Error generando template de correo:", errorCorreo.message);
   }
