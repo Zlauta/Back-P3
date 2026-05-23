@@ -16,7 +16,7 @@ const router = Router();
 
 router.post("/registro", crearUsuarioValidator, registrarUsuarioController);
 router.post("/login", loginUsuarioController);
-router.get("/", obtenerUsuariosController);
+router.get("/", validarAdmin, obtenerUsuariosController);
 router.put("/:id", validarAdmin, editarUsuarioValidator, editarUsuarioController);
 router.delete("/:id", validarAdmin, eliminarUsuarioController);
 
