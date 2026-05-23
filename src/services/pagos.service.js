@@ -5,11 +5,6 @@ import Usuario from "../models/Usuario.js";
 import AppError from "../utils/appError.js";
 import pedidoService from "./pedido.service.js";
 
-/**
- * Crear pedido y preferencia de Mercado Pago
- * @param {Object} data - Datos del pedido y pago
- * @returns {Promise<Object>} ID de preferencia e ID del pedido
- */
 export const crearPedidoYPreferencia = async ({
   items,
   total,
@@ -63,19 +58,12 @@ export const crearPedidoYPreferencia = async ({
 
   const resultadoMP = await preference.create({ body });
 
-  console.log(`✓ Preferencia creada: ${resultadoMP.id} para pedido ${pedidoGuardado._id}`);
-
   return {
     id: resultadoMP.id,
     idPedido: pedidoGuardado._id,
   };
 };
 
-/**
- * Procesar webhook de pago desde Mercado Pago
- * @param {Object} query - Parámetros de query
- * @param {Object} body - Cuerpo de la solicitud
- */
 export const procesarWebhook = async (query, body) => {
   try {
     const topic = query.topic || query.type;
@@ -85,7 +73,7 @@ export const procesarWebhook = async (query, body) => {
       const paymentId = query.id || body?.data?.id;
 
       if (!paymentId) {
-        console.warn("⚠️  ID de pago no encontrado en webhook");
+        console.error("ID de pago no encontrado en webhook");
         return;
       }
 
@@ -94,13 +82,12 @@ export const procesarWebhook = async (query, body) => {
 
       if (pagoData.status === "approved") {
         const idPedido = pagoData.external_reference;
-        console.log(`✓ Pago aprobado. Actualizando pedido ${idPedido}...`);
         await pedidoService.actualizarEstadoPedido(idPedido, "confirmado", true);
       } else {
-        console.log(`⚠️  Pago ${paymentId} con estado: ${pagoData.status}`);
+        console.error(`Pago ${paymentId} rechazado o en estado inesperado: ${pagoData.status}`);
       }
     }
   } catch (error) {
-    console.error("❌ Error procesando webhook:", error.message);
+    console.error("Error procesando webhook:", error.message);
   }
 };
