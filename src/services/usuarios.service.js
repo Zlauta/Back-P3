@@ -61,11 +61,10 @@ export const editarUsuarioService = async (id, body, usuarioAuth) => {
       throw new AppError("No puedes modificar tu propio rol ni estado", 403);
     }
   }
-
-  // Extraemos solo lo que permitimos editar desde este endpoint
+  
   const { nombre, telefono, rol, estado } = body;
   
-  // Creamos un objeto limpio solo con los campos que sí vinieron
+
   const datosAActualizar = {};
   if (nombre) datosAActualizar.nombre = nombre;
   if (telefono) datosAActualizar.telefono = telefono;
